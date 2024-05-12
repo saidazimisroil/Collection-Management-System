@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -45,6 +47,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 10)]
     private ?string $status = null;
+
+    /**
+     * @var Collection<int, ItemCollection>
+     */
+    #[ORM\OneToMany(targetEntity: ItemCollection::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $itemCollectionId;
     
     public function __construct()
     {
@@ -52,6 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->status = UserStatusEnum::ACTIVE->value;
         // Initialize with default admin role
         $this->roles = ['ROLE_ADMIN'];
+        $this->itemCollectionId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,6 +182,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ItemCollection>
+     */
+    public function getItemCollectionId(): Collection
+    {
+        return $this->itemCollectionId;
+    }
+
+    public function addItemCollectionId(ItemCollection $itemCollectionId): static
+    {
+        if (!$this->itemCollectionId->contains($itemCollectionId)) {
+            $this->itemCollectionId->add($itemCollectionId);
+            $itemCollectionId->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemCollectionId(ItemCollection $itemCollectionId): static
+    {
+        if ($this->itemCollectionId->removeElement($itemCollectionId)) {
+            // set the owning side to null (unless already changed)
+            if ($itemCollectionId->getUser() === $this) {
+                $itemCollectionId->setUser(null);
+            }
+        }
 
         return $this;
     }
