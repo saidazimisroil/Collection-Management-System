@@ -9,6 +9,11 @@
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4">{{ collection.description }}</p>
       <p class="lead mb-4">Category: {{ collection.category }}</p>
+
+      {% for intName in collection.integers %}
+        <p class="lead mb-4">{{ intName }}</p>
+      {% endfor %}
+
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
         <a href={{ path('app_collection_update_form', {id:collection.id} ) }} type="button" class="btn btn-warning btn-lg px-4 gap-3">Edit Collection Details</a>
         <a href={{ path('app_collection_delete', {id:collection.id} ) }} type="button" class="btn btn-outline-danger btn-lg px-4">Delete Collection</a>

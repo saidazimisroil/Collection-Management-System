@@ -4,7 +4,7 @@
 
 {% block body %}
 <h2>New Collection</h2>
-<form action="{{ path('app_create_collection') }}" method="POST">
+<form action="{{ path('app_create_collection') }}" method="POST" id="collectionForm">
   <div class="mb-3">
     <label for="collectionName" class="form-label">Collection Name</label>
     <input type="text" class="form-control" id="collectionName" name="name" required>
@@ -22,6 +22,87 @@
       <option value="Silverware">Silverware</option>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">Create</button>
+  
+  <!-- Dynamic field containers -->
+  <div id="integerFieldsContainer"></div>
+  <div id="stringFieldsContainer"></div>
+  <div id="textFieldsContainer"></div>
+  <div id="boolFieldsContainer"></div>
+  <div id="dateFieldsContainer"></div>
+
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <button type="button" class="btn btn-outline-primary" onclick="addField('integer')">+ Add integer field</button>
+    <button type="button" class="btn btn-outline-primary" onclick="addField('string')">+ Add string field</button>
+    <button type="button" class="btn btn-outline-primary" onclick="addField('text')">+ Add text field</button>
+    <button type="button" class="btn btn-outline-primary" onclick="addField('bool')">+ Add bool field</button>
+    <button type="button" class="btn btn-outline-primary" onclick="addField('date')">+ Add date field</button>
+  </div>
+  <button type="submit" class="btn btn-success">Create</button>
 </form>
+
+<script>
+const maxFieldsCount = 3;
+
+function addField(type) {
+  const container = document.getElementById(type + 'FieldsContainer');
+  if (container.children.length < maxFieldsCount) {
+    const fieldIndex = container.children.length + 1;
+    const field = createField(container, type, fieldIndex);
+    container.appendChild(field);
+  }
+  updateAddButtonVisibility(type);
+}
+
+function createField(container, type, index) {
+  let field = document.createElement('div');
+  field.classList.add('mb-3');
+  field.dataset.type = type;
+
+  let label = document.createElement('label');
+  label.classList.add('form-label');
+  label.innerText = 'Enter name of the ' + index + ' ' + type + ' field:';
+
+  let input = document.createElement('input');
+  input.type = 'text';
+  input.classList.add('form-control');
+  input.name = type + 'Field' + index;
+
+  let removeButton = document.createElement('button');
+  removeButton.type = 'button';
+  removeButton.innerText = 'Remove';
+  removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
+  removeButton.onclick = function() {
+    container.removeChild(field);
+    updateFields(container, type);
+    updateAddButtonVisibility(type);
+  };
+
+  field.appendChild(label);
+  field.appendChild(input);
+  field.appendChild(removeButton);
+
+  return field;
+}
+
+function updateFields(container, type) {
+  const fields = container.querySelectorAll('div');
+  fields.forEach((field, index) => {
+    const i = index + 1;
+    field.querySelector('label').innerText = 'Enter name of the ' + i + ' ' + type + ' field:';
+    field.querySelector('input').name = type + 'Field' + i;
+  });
+}
+
+function updateAddButtonVisibility(type) {
+  const container = document.getElementById(type + 'FieldsContainer');
+  const addButton = document.querySelector('button[onclick="addField(\'' + type + '\')"]');
+  if (container.children.length >= maxFieldsCount) {
+    addButton.style.display = 'none';
+  } else {
+    addButton.style.display = 'inline-block';
+  }
+}
+</script>
+
+
 {% endblock %}

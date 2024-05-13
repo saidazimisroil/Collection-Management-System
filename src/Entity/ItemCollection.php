@@ -27,6 +27,21 @@ class ItemCollection
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $integers = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $strings = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $texts = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $bools = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $dates = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,5 +98,65 @@ class ItemCollection
     public function getAllItems()
     {
         return [['name'=> '1', 'description'=>'2', 'id'=> 1]];
+    }
+
+    public function getIntegers(): ?array
+    {
+        return $this->integers;
+    }
+
+    public function setIntegers(?array $integers): static
+    {
+        $this->integers = $integers;
+
+        return $this;
+    }
+
+    public function getStrings(): ?array
+    {
+        return $this->strings;
+    }
+
+    public function setStrings(?array $strings): static
+    {
+        $this->strings = $strings;
+
+        return $this;
+    }
+
+    public function getTexts(): ?array
+    {
+        return $this->texts;
+    }
+
+    public function setTexts(?array $texts): static
+    {
+        $this->texts = $texts;
+
+        return $this;
+    }
+
+    public function getBools(): ?array
+    {
+        return $this->bools;
+    }
+
+    public function setBools(?array $bools): static
+    {
+        $this->bools = $bools;
+
+        return $this;
+    }
+
+    public function getDates(): ?array
+    {
+        return $this->dates;
+    }
+
+    public function setDates(?array $dates): static
+    {
+        $this->dates = $dates;
+
+        return $this;
     }
 }

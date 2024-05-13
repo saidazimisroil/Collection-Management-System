@@ -76,6 +76,13 @@ class CollectionsController extends AbstractController
         $collection->setCategory($request->request->get('category'));
         $collection->setUser($user);
 
+        // Custom fields
+        $int1 = $request->request->get('integerField1') ? $request->request->get('integerField1') : null;
+        $int2 = $request->request->get('integerField2') ? $request->request->get('integerField2') : null;
+        $int3 = $request->request->get('integerField3') ? $request->request->get('integerField3') : null;
+        
+        $collection->setIntegers([$int1, $int2, $int3]);
+
         $this->em->persist($collection);
         $this->em->flush();
 
