@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CategoriesEnum;
 use App\Entity\ItemCollection;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -100,12 +101,34 @@ class CollectionsController extends AbstractController
     public function getEditForm(int $id): Response
     {
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
+        if (!$collection) {
+            throw $this->createNotFoundException('The collection does not exist');
+        }
+        
+        $currentCategory = $collection->getCategory(); // Assuming getCategory() method returns a CategoriesEnum object
+
+        // Get all enum cases
+        $categories = CategoriesEnum::cases();
+
+        // Filter out the current category and get the remaining categories
+        $sortedCategories = array_filter($categories, function ($category) use ($currentCategory) {
+            return $category->value !== $currentCategory;
+        });
+
+        // Convert enum cases to values suitable for rendering
+        $categoryValues = array_map(function ($category) {
+            return $category->value;
+        }, $sortedCategories);
+
+        // Prepend the current category's value for display
+        array_unshift($categoryValues, $currentCategory);
 
         return $this->render('collections/update_collection.html.twig', [
             'collection' => $collection,
+            'categories' => $categoryValues,
         ]);
     }
-    
+
     #[Route('/edit/{id<\d+>}', methods:['POST'], name: 'app_collection_update')]
     public function update(int $id, Request $request): Response
     {

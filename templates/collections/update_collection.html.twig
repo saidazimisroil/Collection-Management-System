@@ -16,10 +16,9 @@
   <div class="mb-3">
     <label for="collectionCategory" class="form-label">Category</label>
     <select class="form-control" id="collectionCategory" name="category">
-      <option value="Other">Other</option>
-      <option value="Books">Books</option>
-      <option value="Signs">Signs</option>
-      <option value="Silverware">Silverware</option>
+      {% for category in categories %}
+        <option value="{{ category }}">{{ category }}</option>
+      {% endfor %}
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Create</button>
