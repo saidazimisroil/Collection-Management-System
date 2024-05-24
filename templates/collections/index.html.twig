@@ -5,7 +5,7 @@
 {% block body %}
     {% include "partials/newBtn.html.twig" with { 'route': createRouteName } %}
     {% if collections == null %}
-        <h1>There is no any collection!</h1>
+        <h1 class="my-3">There is no any collection!</h1>
     {% else %}
     <div class="row row-cols-1 row-cols-md-3 my-3 text-center">
         {% for c in collections %}
@@ -15,7 +15,7 @@
                         <h4 class="my-0 fw-normal">{{ c.name }}</h4>
                     </div>
                     <div class="card-body">
-                        <ul class="list-unstyled mt-3 mb-4">
+                        <ul class="list-unstyled mt-3 mb-4 p-auto">
                             <li>{{ c.description }}</li>
                         </ul>
                         <a href={{ path("app_collection", {id:c.id} ) }} type="button" class="w-100 btn btn-lg btn-primary">See items</a>

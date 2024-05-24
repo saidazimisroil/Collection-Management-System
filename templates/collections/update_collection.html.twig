@@ -3,40 +3,42 @@
 {% block title %}New Collection{% endblock %}
 
 {% block body %}
-  <h2>Edit Collection</h2>
   <form action="{{ path('app_collection_update', {id:collection.id}) }}" method="POST">
-    <div class="mb-3">
-      <label for="collectionName" class="form-label">Collection Name</label>
-      <input type="text" class="form-control" id="collectionName" name="name" value="{{ collection.name }}" required>
-    </div>
-    <div class="mb-3">
-      <label for="collectionDescription" class="form-label">Description</label>
-      <textarea class="form-control" id="collectionDescription" name="description" rows="3" required>{{ collection.description }}</textarea>
-    </div>
-    <div class="mb-3">
-      <label for="collectionCategory" class="form-label">Category</label>
-      <select class="form-control" id="collectionCategory" name="category">
-        {% for category in categories %}
-          <option value="{{ category }}">{{ category }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    
-    {% for fieldType, fieldArray in customFields %}
-      <div id="{{ fieldType }}FieldsContainer">
-      {% set count = 1 %}
-        {% for field in fieldArray %}
-          {% if field %}
-              <div class="mb-3" data-type="{{ fieldType }}">
-                <label class="form-label">Name of the {{ count }} {{ fieldType }} field:</label>
-                <input type="text" class="form-control" name="{{ fieldType }}Field{{ count }}" value="{{ field ?? '' }}" required>
-              </div>
-              {% set count = count + 1 %}
-          {% endif %}
-        {% endfor %}
+    <div class="bg-body-tertiary rounded-5 p-5 m-5">
+      <h2>Edit Collection</h2>
+      <div class="input-group mb-3">
+        <span for="collectionName" class="input-group-text">Collection Name</span>
+        <input type="text" class="form-control" id="collectionName" name="name" value="{{ collection.name }}" required>
       </div>
-    {% endfor %}
+      <div class="form-floating mb-3">
+        <textarea class="form-control" id="collectionDescription" name="description" style="height: 100px" required>{{ collection.description }}</textarea>
+        <label for="collectionDescription">Description</label>
+      </div>
+      <div class="input-group mb-3">
+        <label for="collectionCategory" class="input-group-text">Category</label>
+        <select class="form-select" id="collectionCategory" name="category">
+          {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      {% for fieldType, fieldArray in customFields %}
+        <div id="{{ fieldType }}FieldsContainer">
+        {% set count = 1 %}
+          {% for field in fieldArray %}
+            {% if field %}
+                <div class="input-group mb-3" data-type="{{ fieldType }}">
+                  <span class="input-group-text">Name of the {{ count }} {{ fieldType }} field:</span>
+                  <input type="text" class="form-control" name="{{ fieldType }}Field{{ count }}" value="{{ field ?? '' }}" required>
+                </div>
+                {% set count = count + 1 %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
 
-    <button type="submit" class="btn btn-warning mb-5">Save</button>
+      <button type="submit" class="btn btn-warning">Save</button>
+    </div>
   </form>
 {% endblock %}
