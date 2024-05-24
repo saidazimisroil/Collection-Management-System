@@ -204,6 +204,11 @@ class CollectionsController extends AbstractController
     {
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
 
+        $currentUser = $this->security->getUser();
+        if($currentUser !== $collection->getUser()){
+            return $this->redirectToRoute('app_collections_my');
+        }
+
         $this->em->remove($collection);
         $this->em->flush();
 
