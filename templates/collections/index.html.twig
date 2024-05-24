@@ -3,11 +3,6 @@
 {% block title %}Collections{% endblock %}
 
 {% block body %}
-    {% block myCollectionsBtn %}
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href={{ url('app_collections_my') }} class="btn btn-primary rounded-pill me-md-2" type="button">My Collections</a>
-    </div>  
-    {% endblock %}
     {% include "partials/newBtn.html.twig" with { 'route': createRouteName } %}
     {% if collections == null %}
         <h1>There is no any collection!</h1>

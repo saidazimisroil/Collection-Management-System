@@ -3,24 +3,40 @@
 {% block title %}New Collection{% endblock %}
 
 {% block body %}
-<h2>Edit Collection</h2>
-<form action="{{ path('app_collection_update', {id:collection.id}) }}" method="POST">
-  <div class="mb-3">
-    <label for="collectionName" class="form-label">Collection Name</label>
-    <input type="text" class="form-control" id="collectionName" name="name" value={{ collection.name }} required>
-  </div>
-  <div class="mb-3">
-    <label for="collectionDescription" class="form-label">Description</label>
-    <textarea class="form-control" id="collectionDescription" name="description" rows="3" required>{{ collection.description }}</textarea>
-  </div>
-  <div class="mb-3">
-    <label for="collectionCategory" class="form-label">Category</label>
-    <select class="form-control" id="collectionCategory" name="category">
-      {% for category in categories %}
-        <option value="{{ category }}">{{ category }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <button type="submit" class="btn btn-primary">Save</button>
-</form>
+  <h2>Edit Collection</h2>
+  <form action="{{ path('app_collection_update', {id:collection.id}) }}" method="POST">
+    <div class="mb-3">
+      <label for="collectionName" class="form-label">Collection Name</label>
+      <input type="text" class="form-control" id="collectionName" name="name" value="{{ collection.name }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="collectionDescription" class="form-label">Description</label>
+      <textarea class="form-control" id="collectionDescription" name="description" rows="3" required>{{ collection.description }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="collectionCategory" class="form-label">Category</label>
+      <select class="form-control" id="collectionCategory" name="category">
+        {% for category in categories %}
+          <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    {% for fieldType, fieldArray in customFields %}
+      <div id="{{ fieldType }}FieldsContainer">
+      {% set count = 1 %}
+        {% for field in fieldArray %}
+          {% if field %}
+              <div class="mb-3" data-type="{{ fieldType }}">
+                <label class="form-label">Name of the {{ count }} {{ fieldType }} field:</label>
+                <input type="text" class="form-control" name="{{ fieldType }}Field{{ count }}" value="{{ field ?? '' }}" required>
+              </div>
+              {% set count = count + 1 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-warning mb-5">Save</button>
+  </form>
 {% endblock %}

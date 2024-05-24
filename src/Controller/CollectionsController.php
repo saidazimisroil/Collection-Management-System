@@ -55,20 +55,16 @@ class CollectionsController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'app_create_collection', methods:['GET'])]
+    #[Route('/me/create', name: 'app_create_collection', methods:['GET'])]
     public function create(): Response
     {
         return $this->render('collections/create_collection.html.twig');
     }
     
-    #[Route('/create', name: 'app_store_collection', methods: ['POST'])]
+    #[Route('/me/create', name: 'app_store_collection', methods: ['POST'])]
     public function store(Request $request): Response
     {
         $user = $this->security->getUser();
-        if (!$user) {
-            $this->addFlash('error', 'You must be logged in to create a collection.');
-            return $this->redirectToRoute('app_login');
-        }
 
         $collection = new ItemCollection();
         $collection->setName($request->request->get('name'));
@@ -77,11 +73,35 @@ class CollectionsController extends AbstractController
         $collection->setUser($user);
 
         // Custom fields
+        // Integers
         $int1 = $request->request->get('integerField1') ? $request->request->get('integerField1') : null;
         $int2 = $request->request->get('integerField2') ? $request->request->get('integerField2') : null;
         $int3 = $request->request->get('integerField3') ? $request->request->get('integerField3') : null;
-        
         $collection->setIntegers([$int1, $int2, $int3]);
+
+        // Strings
+        $string1 = $request->request->get('stringField1') ? $request->request->get('stringField1') : null;
+        $string2 = $request->request->get('stringField2') ? $request->request->get('stringField2') : null;
+        $string3 = $request->request->get('stringField3') ? $request->request->get('stringField3') : null;
+        $collection->setStrings([$string1, $string2, $string3]);
+
+        // Texts
+        $text1 = $request->request->get('textField1') ? $request->request->get('textField1') : null;
+        $text2 = $request->request->get('textField2') ? $request->request->get('textField2') : null;
+        $text3 = $request->request->get('textField3') ? $request->request->get('textField3') : null;
+        $collection->setTexts([$text1, $text2, $text3]);
+
+        // Booleans
+        $bool1 = $request->request->get('boolField1') ? $request->request->get('boolField1') : null;
+        $bool2 = $request->request->get('boolField2') ? $request->request->get('boolField2') : null;
+        $bool3 = $request->request->get('boolField3') ? $request->request->get('boolField3') : null;
+        $collection->setBools([$bool1, $bool2, $bool3]);
+
+        // Dates
+        $date1 = $request->request->get('dateField1') ? $request->request->get('dateField1') : null;
+        $date2 = $request->request->get('dateField2') ? $request->request->get('dateField2') : null;
+        $date3 = $request->request->get('dateField3') ? $request->request->get('dateField3') : null;
+        $collection->setDates([$date1, $date2, $date3]);
 
         $this->em->persist($collection);
         $this->em->flush();
@@ -95,12 +115,10 @@ class CollectionsController extends AbstractController
     {
         // chosen collection
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
-        $items = $collection->getAllItems();
 
         return $this->render('collections/collection.html.twig', [
             'collection' => $collection,
             'createRouteName' => $this->createRouteName,
-            'items' => $items,
         ]);
     }
 
@@ -110,6 +128,11 @@ class CollectionsController extends AbstractController
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
         if (!$collection) {
             throw $this->createNotFoundException('The collection does not exist');
+        }
+
+        $currentUser = $this->security->getUser();
+        if($currentUser !== $collection->getUser()){
+            return $this->redirectToRoute('app_collections_my');
         }
         
         $currentCategory = $collection->getCategory(); // Assuming getCategory() method returns a CategoriesEnum object
@@ -130,10 +153,29 @@ class CollectionsController extends AbstractController
         // Prepend the current category's value for display
         array_unshift($categoryValues, $currentCategory);
 
+        $customFields = $this->getCustomFields($collection);
+
         return $this->render('collections/update_collection.html.twig', [
             'collection' => $collection,
             'categories' => $categoryValues,
+            'customFields' => $customFields
         ]);
+    }
+    private function getCustomFields($collection) : array
+    {
+        $ints = $collection->getIntegers();
+        $strs = $collection->getStrings();
+        $txts = $collection->getTexts();
+        $bools = $collection->getBools();
+        $dates = $collection->getDates();
+
+        return array(
+            'integer' => $ints, 
+            'string' => $strs, 
+            'text' => $txts, 
+            'boolean' => $bools, 
+            'date' => $dates
+        );
     }
 
     #[Route('/edit/{id<\d+>}', methods:['POST'], name: 'app_collection_update')]
@@ -144,6 +186,11 @@ class CollectionsController extends AbstractController
         $collection->setName($request->request->get('name'));
         $collection->setDescription($request->request->get('description'));
         $collection->setCategory($request->request->get('category'));
+        $collection->setIntegers([$request->request->get('integerField1'), $request->request->get('integerField2'), $request->request->get('integerField3')]);
+        $collection->setStrings([$request->request->get('stringField1'), $request->request->get('stringField2'), $request->request->get('stringField3')]);
+        $collection->setTexts([$request->request->get('textField1'), $request->request->get('textField2'), $request->request->get('textField3')]);
+        $collection->setBools([$request->request->get('booleanField1'), $request->request->get('booleanField2'), $request->request->get('booleanField3')]);
+        $collection->setDates([$request->request->get('dateField1'), $request->request->get('dateField2'), $request->request->get('dateField3')]);
 
         $this->em->persist($collection);
         $this->em->flush();

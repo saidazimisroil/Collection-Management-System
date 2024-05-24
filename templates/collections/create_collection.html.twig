@@ -3,41 +3,49 @@
 {% block title %}New Collection{% endblock %}
 
 {% block body %}
-<h2>New Collection</h2>
 <form action="{{ path('app_create_collection') }}" method="POST" id="collectionForm">
-  <div class="mb-3">
-    <label for="collectionName" class="form-label">Collection Name</label>
-    <input type="text" class="form-control" id="collectionName" name="name" required>
-  </div>
-  <div class="mb-3">
-    <label for="collectionDescription" class="form-label">Description</label>
-    <textarea class="form-control" id="collectionDescription" name="description" rows="3" required></textarea>
-  </div>
-  <div class="mb-3">
-    <label for="collectionCategory" class="form-label">Category</label>
-    <select class="form-control" id="collectionCategory" name="category">
-      <option value="Other">Other</option>
-      <option value="Books">Books</option>
-      <option value="Signs">Signs</option>
-      <option value="Silverware">Silverware</option>
-    </select>
-  </div>
-  
-  <!-- Dynamic field containers -->
-  <div id="integerFieldsContainer"></div>
-  <div id="stringFieldsContainer"></div>
-  <div id="textFieldsContainer"></div>
-  <div id="boolFieldsContainer"></div>
-  <div id="dateFieldsContainer"></div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-9 p-5 bg-body-tertiary rounded-5">
+      <h2>New Collection</h2>
+      <div class="mb-2">
+        <label for="collectionName" class="form-label">Collection Name</label>
+        <input type="text" class="form-control" id="collectionName" name="name" required>
+      </div>
+      <div class="mb-2">
+        <label for="collectionDescription" class="form-label">Description</label>
+        <textarea class="form-control" id="collectionDescription" name="description" rows="3" required></textarea>
+      </div>
+      <div class="mb-2">
+        <label for="collectionCategory" class="form-label">Category</label>
+        <select class="form-control" id="collectionCategory" name="category">
+          <option value="Other">Other</option>
+          <option value="Books">Books</option>
+          <option value="Signs">Signs</option>
+          <option value="Silverware">Silverware</option>
+        </select>
+      </div>
+      
+      <!-- Dynamic field containers -->
+      <div id="integerFieldsContainer"></div>
+      <div id="stringFieldsContainer"></div>
+      <div id="textFieldsContainer"></div>
+      <div id="boolFieldsContainer"></div>
+      <div id="dateFieldsContainer"></div>
+    
+      <button type="submit" class="btn btn-success mt-2">Create</button>
+		</div>
 
-  <div class="d-grid gap-2 col-6 mx-auto">
-    <button type="button" class="btn btn-outline-primary" onclick="addField('integer')">+ Add integer field</button>
-    <button type="button" class="btn btn-outline-primary" onclick="addField('string')">+ Add string field</button>
-    <button type="button" class="btn btn-outline-primary" onclick="addField('text')">+ Add text field</button>
-    <button type="button" class="btn btn-outline-primary" onclick="addField('bool')">+ Add bool field</button>
-    <button type="button" class="btn btn-outline-primary" onclick="addField('date')">+ Add date field</button>
-  </div>
-  <button type="submit" class="btn btn-success">Create</button>
+    {# Custom fields #}
+		<div class="col-md-2 m-auto">
+      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('integer')">+ Add integer field</button></div>
+      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('string')">+ Add string field</button></div>
+      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('text')">+ Add text field</button></div>
+      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('bool')">+ Add bool field</button></div>
+      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('date')">+ Add date field</button></div>
+		</div>
+	</div>
+</div>
 </form>
 
 <script>
@@ -55,7 +63,7 @@ function addField(type) {
 
 function createField(container, type, index) {
   let field = document.createElement('div');
-  field.classList.add('mb-3');
+  field.classList.add('mb-2');
   field.dataset.type = type;
 
   let label = document.createElement('label');

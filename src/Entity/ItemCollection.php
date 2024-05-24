@@ -95,11 +95,6 @@ class ItemCollection
         return $this;
     }
     
-    public function getAllItems()
-    {
-        return [['name'=> '1', 'description'=>'2', 'id'=> 1]];
-    }
-
     public function getIntegers(): ?array
     {
         return $this->integers;
