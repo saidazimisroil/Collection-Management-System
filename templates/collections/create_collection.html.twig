@@ -63,8 +63,7 @@ function addField(type) {
 
 function createField(container, type, index) {
   let field = document.createElement('div');
-  field.classList.add('input-group');
-  field.classList.add('mb-2');
+  field.classList.add('input-group', 'mb-2');
   field.dataset.type = type;
 
   let input = document.createElement('input');
@@ -93,8 +92,8 @@ function updateFields(container, type) {
   const fields = container.querySelectorAll('div');
   fields.forEach((field, index) => {
     const i = index + 1;
-    field.querySelector('label').innerText = 'Enter name of the ' + i + ' ' + type + ' field:';
     field.querySelector('input').name = type + 'Field' + i;
+    field.querySelector('input').placeholder = 'Enter name of the ' + i + ' ' + type + ' field:';
   });
 }
 

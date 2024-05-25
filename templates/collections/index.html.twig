@@ -3,9 +3,19 @@
 {% block title %}Collections{% endblock %}
 
 {% block body %}
-    {% include "partials/newBtn.html.twig" with { 'route': createRouteName } %}
-    {% if collections == null %}
-        <h1 class="my-3">There is no any collection!</h1>
+    <div class="row">
+        <div class="col">
+            <form action="{{ path('app_collections_search') }}" method="GET" class="input-group m-auto">
+                <span class="input-group-text">🔍</span>
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" name="prompt" required>
+                <button class="btn btn-outline-info" type="submit" id="button-addon2">Search</button>
+            </form>
+        </div>
+
+        {% include 'partials/newBtn.html.twig' with { 'route': createRouteName } %}
+    </div>
+    {% if collections is empty %}
+        <h1 class="my-3">There are no collections!</h1>
     {% else %}
     <div class="row row-cols-1 row-cols-md-3 my-3 text-center">
         {% for c in collections %}
@@ -18,7 +28,7 @@
                         <ul class="list-unstyled mt-3 mb-4 p-auto">
                             <li>{{ c.description }}</li>
                         </ul>
-                        <a href={{ path("app_collection", {id:c.id} ) }} type="button" class="w-100 btn btn-lg btn-primary">See items</a>
+                        <a href="{{ path('app_collection', {id:c.id}) }}" type="button" class="w-100 btn btn-lg btn-primary">See items</a>
                     </div>
                 </div>
             </div>
