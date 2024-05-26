@@ -34,11 +34,16 @@
 
       {% if app.user and app.user.email == collection.user.email %}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a href={{ path('app_item_new', {id:collection.id} ) }} type="button" class="btn btn-success btn-lg px-4 gap-3">+ Add New Item</a>
           <a href={{ path('app_collection_update_form', {id:collection.id} ) }} type="button" class="btn btn-warning btn-lg px-4 gap-3">Edit Collection Details</a>
           <a href={{ path('app_collection_delete', {id:collection.id} ) }} type="button" class="btn btn-outline-danger btn-lg px-4">Delete Collection</a>
         </div>
       {% endif %}
       
     </div>
+
+    {% if collection.item is not empty %}
+      {% include "item/index.html.twig" with {'collection': collection}%}
+    {% endif %}
   </div>
 {% endblock %}

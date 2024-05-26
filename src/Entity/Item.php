@@ -19,6 +19,10 @@ class Item
     #[ORM\Column(length: 255)]
     private ?string $tags = null;
 
+    #[ORM\ManyToOne(inversedBy: 'item')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ItemCollection $itemCollection = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class Item
     public function setTags(string $tags): static
     {
         $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function getItemCollection(): ?ItemCollection
+    {
+        return $this->itemCollection;
+    }
+
+    public function setItemCollection(?ItemCollection $itemCollection): static
+    {
+        $this->itemCollection = $itemCollection;
 
         return $this;
     }

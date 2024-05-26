@@ -1,0 +1,19 @@
+<h2>Items</h2>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in collection.item %}
+      <tr>
+        <th scope="row">1</th>
+        <td>{{ item.name }}</td>
+        <td>{{ item.tags }}</td>
+      </tr>
+    {% endfor %}
+  </body>
+</table>

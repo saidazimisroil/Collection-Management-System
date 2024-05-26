@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ItemCollectionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -41,6 +43,17 @@ class ItemCollection
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $dates = null;
+
+    /**
+     * @var Collection<int, item>
+     */
+    #[ORM\OneToMany(targetEntity: item::class, mappedBy: 'itemCollection', orphanRemoval: true)]
+    private Collection $item;
+
+    public function __construct()
+    {
+        $this->item = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -151,6 +164,36 @@ class ItemCollection
     public function setDates(?array $dates): static
     {
         $this->dates = $dates;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, item>
+     */
+    public function getItem(): Collection
+    {
+        return $this->item;
+    }
+
+    public function addItem(item $item): static
+    {
+        if (!$this->item->contains($item)) {
+            $this->item->add($item);
+            $item->setItemCollection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(item $item): static
+    {
+        if ($this->item->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getItemCollection() === $this) {
+                $item->setItemCollection(null);
+            }
+        }
 
         return $this;
     }
