@@ -47,7 +47,7 @@ class ItemCollection
     /**
      * @var Collection<int, item>
      */
-    #[ORM\OneToMany(targetEntity: item::class, mappedBy: 'itemCollection', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'itemCollection', orphanRemoval: true)]
     private Collection $item;
 
     public function __construct()
