@@ -5,6 +5,7 @@
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Tags</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -13,6 +14,10 @@
         <th scope="row">1</th>
         <td>{{ item.name }}</td>
         <td>{{ item.tags }}</td>
+        <td>
+          <a href={{ path('app_item_edit', {id: item.id}) }} class="btn btn-warning">Edit</a>
+          <a href={{ path('app_item_delete', {id: item.id}) }} class="btn btn-outline-danger">Delete</a>
+        </td>
       </tr>
     {% endfor %}
   </body>

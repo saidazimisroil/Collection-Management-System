@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Edit Item{% endblock %}
+
+{% block body %}
+    <h3>Collection Name: {{ collection.name }}</h3>
+    <form action={{ path('app_item_update', {'id': item.id} ) }} method="POST">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-9 p-5 bg-body-tertiary rounded-5">
+            <h2>Edit Item</h2>
+            <div class="input-group mb-2">
+                <span for="itemName" class="input-group-text">Item Name</span>
+                <input type="text" class="form-control" id="itemName" name="name" value="{{ item.name }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-warning mt-2">Save</button>
+        </div>
+    </form>
+{% endblock %}
