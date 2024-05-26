@@ -38,8 +38,18 @@ class LikeController extends AbstractController
             ->getOneOrNullResult();
 
         if ($existingLike) {
-            // If the like already exists, do nothing or handle it accordingly
-            $this->addFlash('warning', 'You have already liked this item.');
+            // If the like already exists, remove the user from the like
+            $existingLike->removeUser($currentUser);
+
+            if ($existingLike->getUsers()->isEmpty()) {
+                $this->em->remove($existingLike);
+            } else {
+                $this->em->persist($existingLike);
+            }
+
+            $this->em->flush();
+
+            $this->addFlash('success', 'Like removed successfully.');
         } else {
             if($item->getLikes()){
                 $like = $item->getLikes();

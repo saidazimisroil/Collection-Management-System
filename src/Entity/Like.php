@@ -16,7 +16,7 @@ class Like
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'likes', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Item $Item = null;
 
