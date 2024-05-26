@@ -17,7 +17,7 @@
         <td>{{ item.tags }}</td>
         <td>{{ item.likes ? item.likes.users|length : 0 }}</td>
         <td>
-          {% if item.likes %}
+          {% if item.likes and app.user %}
             {% set doILiked = item.likes.users|filter(u => u.email == app.user.email)|first %}
             {% if doILiked %}
               <a href={{ path('app_like', {id: item.id}) }} class="btn btn-primary">👍 Like</a>
