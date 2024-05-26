@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Item;
+use App\Entity\Like;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route('/like')]
+class LikeController extends AbstractController
+{
+    public function __construct(
+        private Security $security,
+        private EntityManagerInterface $em
+    ) {}
+
+    #[Route('/{id<\d+>}', name: 'app_like')]
+    public function index(int $id): Response
+    {
+        $item = $this->em->getRepository(Item::class)->find($id);
+        $currentUser = $this->security->getUser();
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $currentUser->getUserIdentifier()]);
+
+        // Check if the like already exists
+        $likeRepository = $this->em->getRepository(Like::class);
+        $existingLike = $likeRepository->createQueryBuilder('l')
+            ->innerJoin('l.users', 'u')
+            ->where('l.Item = :item')
+            ->andWhere('u.id = :user')
+            ->setParameter('item', $item)
+            ->setParameter('user', $user->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($existingLike) {
+            // If the like already exists, do nothing or handle it accordingly
+            $this->addFlash('warning', 'You have already liked this item.');
+        } else {
+            if($item->getLikes()){
+                $like = $item->getLikes();
+            } else {
+                $like = new Like();
+                $like->setItem($item);
+            }            
+            
+            $like->addUser($user);
+
+            $this->em->persist($like);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Item liked successfully.');
+        }
+
+        $collection = $item->getItemCollection();
+        return $this->redirectToRoute('app_collection', ['id' => $collection->getId()]);
+    }
+}

@@ -118,7 +118,6 @@ class CollectionsController extends AbstractController
 
         return $this->render('collections/collection.html.twig', [
             'collection' => $collection,
-            'createRouteName' => $this->createRouteName,
         ]);
     }
 

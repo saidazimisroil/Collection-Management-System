@@ -37,6 +37,9 @@ security:
   access_control:
     - { path: ^/collections/me, roles: ROLE_ADMIN }
     - { path: ^/collections/edit, roles: ROLE_ADMIN }
+    - { path: ^/collections/delete, roles: ROLE_ADMIN }
+    - { path: ^/item, roles: ROLE_ADMIN }
+    - { path: ^/like, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

@@ -19,14 +19,6 @@ class ItemController extends AbstractController
         private EntityManagerInterface $em
     ) {}
 
-    #[Route('/', name: 'app_item')]
-    public function index(): Response
-    {
-        return $this->render('item/index.html.twig', [
-            'controller_name' => 'ItemController',
-        ]);
-    }
-
     #[Route('/new/{id<\d+>}', name: 'app_item_new', methods:['GET'])]
     public function new(int $id): Response
     {

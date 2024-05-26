@@ -23,6 +23,9 @@ class Item
     #[ORM\JoinColumn(nullable: false)]
     private ?ItemCollection $itemCollection = null;
 
+    #[ORM\OneToOne(mappedBy: 'Item', cascade: ['persist', 'remove'])]
+    private ?Like $likes = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,23 @@ class Item
     public function setItemCollection(?ItemCollection $itemCollection): static
     {
         $this->itemCollection = $itemCollection;
+
+        return $this;
+    }
+
+    public function getLikes(): ?Like
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(Like $likes): static
+    {
+        // set the owning side of the relation if necessary
+        if ($likes->getItem() !== $this) {
+            $likes->setItem($this);
+        }
+
+        $this->likes = $likes;
 
         return $this;
     }

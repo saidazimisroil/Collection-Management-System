@@ -16,7 +16,7 @@
 
       <div class="col-md-3 text-end">
         {% if app.user %}
-          <a href={{ url("app_logout") }} type="button" class="btn btn-outline-danger me-2">Logout</a>
+          <a href={{ logout_path() }} type="button" class="btn btn-outline-danger me-2">Logout</a>
         {% else %}
           <a href={{ url("app_login") }} type="button" class="btn btn-outline-primary me-2">Login</a>
           <a href={{ url("app_register") }} type="button" class="btn btn-success">Sign-up</a>

@@ -53,6 +53,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: ItemCollection::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $itemCollectionId;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\ManyToMany(targetEntity: Like::class, mappedBy: 'users')]
+    private Collection $likes;
     
     public function __construct()
     {
@@ -61,6 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // Initialize with default admin role
         $this->roles = ['ROLE_ADMIN'];
         $this->itemCollectionId = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +218,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($itemCollectionId->getUser() === $this) {
                 $itemCollectionId->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            $like->removeUser($this);
         }
 
         return $this;
