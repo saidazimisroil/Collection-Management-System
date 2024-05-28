@@ -58,6 +58,12 @@ class Item
     #[ORM\OneToMany(targetEntity: TextField::class, mappedBy: 'Item', orphanRemoval: true)]
     private Collection $textFields;
 
+    /**
+     * @var Collection<int, BoolField>
+     */
+    #[ORM\OneToMany(targetEntity: BoolField::class, mappedBy: 'Item', orphanRemoval: true)]
+    private Collection $boolFields;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -65,6 +71,7 @@ class Item
         $this->stringFields = new ArrayCollection();
         $this->dateFields = new ArrayCollection();
         $this->textFields = new ArrayCollection();
+        $this->boolFields = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -269,6 +276,36 @@ class Item
             // set the owning side to null (unless already changed)
             if ($textField->getItem() === $this) {
                 $textField->setItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BoolField>
+     */
+    public function getBoolFields(): Collection
+    {
+        return $this->boolFields;
+    }
+
+    public function addBoolField(BoolField $boolField): static
+    {
+        if (!$this->boolFields->contains($boolField)) {
+            $this->boolFields->add($boolField);
+            $boolField->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoolField(BoolField $boolField): static
+    {
+        if ($this->boolFields->removeElement($boolField)) {
+            // set the owning side to null (unless already changed)
+            if ($boolField->getItem() === $this) {
+                $boolField->setItem(null);
             }
         }
 

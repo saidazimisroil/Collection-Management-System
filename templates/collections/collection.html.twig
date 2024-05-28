@@ -14,27 +14,6 @@
       <p class="lead mb-1">{{ collection.description }}</p>
       <p class="lead mb-1">Category: {{ collection.category }}</p>
 
-      {# integers strings texts bools dates #}
-      {% for intName in collection.integers %}
-        <p class="lead mb-1">{{ intName }}</p>
-      {% endfor %}
-
-      {% for stringName in collection.strings %}
-        <p class="lead mb-1">{{ stringName }}</p>
-      {% endfor %}
-
-      {% for textName in collection.texts %}
-        <p class="lead mb-1">{{ textName }}</p>
-      {% endfor %}
-
-      {% for boolName in collection.bools %}
-        <p class="lead mb-1">{{ boolName }}</p>
-      {% endfor %}
-
-      {% for dateName in collection.dates %}
-        <p class="lead mb-1">{{ dateName }}</p>
-      {% endfor %}
-
       {% if app.user and app.user.email == collection.user.email %}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
           <a href={{ path('app_item_new', {id:collection.id} ) }} type="button" class="btn btn-success btn-lg px-4 gap-3">+ Add New Item</a>

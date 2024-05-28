@@ -34,20 +34,29 @@
 						{% endif %}
 					{% endfor %}
 					
-					{% for date in collection.dates %}
-						{% if date %}
-							<div class="input-group mb-2">
-								<span for="date{{ loop.index }}" class="input-group-text">{{ date|capitalize }}</span>
-								<input type="date" class="form-control" id="date{{ loop.index }}" name="date{{ loop.index }}" required>
-							</div>
-						{% endif %}
-					{% endfor %}
-					
 					{% for text in collection.texts %}
 						{% if text %}
 							<div class="form-floating">
 								<textarea class="form-control" placeholder="Leave a {{ text }} here" id="floatingTextarea2" style="height: 100px" name="text{{ loop.index }}"></textarea>
 								<label for="floatingTextarea2">{{ text|capitalize }}</label>
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% for bool in collection.bools %}
+						{% if bool %}
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="bool{{loop.index}}">
+								<label class="form-check-label" for="flexCheckDefault">{{ bool }}</label>
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% for date in collection.dates %}
+						{% if date %}
+							<div class="input-group mb-2">
+								<span for="date{{ loop.index }}" class="input-group-text">{{ date|capitalize }}</span>
+								<input type="date" class="form-control" id="date{{ loop.index }}" name="date{{ loop.index }}" required>
 							</div>
 						{% endif %}
 					{% endfor %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\BoolField;
 use App\Entity\DateField;
 use App\Entity\Integer;
 use App\Entity\Item;
@@ -99,11 +100,27 @@ class ItemController extends AbstractController
                 
                 $text = new TextField();
                 $text->setName($name);
-                $text->setValue($textValue);
+                $text->setValue(rtrim($textValue));
                 
                 $item->addTextField($text);
 
                 $this->em->persist($text);
+            }
+        }
+
+        $boolNames = $collection->getBools();
+        foreach ($boolNames as $index =>$boolName) {
+            $name = strtolower($boolName);
+            if ($name) {
+                $boolValue = $request->request->has('bool' . ++$index) ? true : false;
+                
+                $bool = new BoolField();
+                $bool->setName($name);
+                $bool->setValue($boolValue);
+                
+                $item->addBoolField($bool);
+
+                $this->em->persist($bool);
             }
         }
 

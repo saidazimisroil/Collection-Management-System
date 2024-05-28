@@ -47,6 +47,16 @@
 				</div>
 			{% endfor %}
 
+			{% for bool in item.boolFields %}
+				<div class="col d-flex align-items-start">
+					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
+					<div>
+						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ bool.name|capitalize }}</h3>
+						<p>{{ bool.value ? "Yes" : "No"}}</p>
+					</div>
+				</div>
+			{% endfor %}
+
 			{% for date in item.dateFields %}
 				<div class="col d-flex align-items-start">
 					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
