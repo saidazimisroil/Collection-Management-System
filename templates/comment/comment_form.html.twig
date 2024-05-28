@@ -1,0 +1,9 @@
+<form action={{ path('app_comment', {id: item.id}) }} methods="POST">
+	<div class="form-floating">
+		<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="content"></textarea>
+		<label for="floatingTextarea2">Comments</label>
+	</div>
+	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+		<button class="btn btn-primary btn-sm me-md-2" type="submit">Send ▶️</button>
+	</div>
+</form>

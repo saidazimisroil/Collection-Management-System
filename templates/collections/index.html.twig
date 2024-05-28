@@ -18,7 +18,7 @@
         <h1 class="my-3">There are no collections!</h1>
     {% else %}
     <div class="row row-cols-1 row-cols-md-3 my-3 text-center">
-        {% for c in collections %}
+        {% for c in collections|reverse %}
             <div class="col">
                 <div class="card mb-4 rounded-3 shadow-sm border-primary">
                     <div class="card-header py-3 text-bg-primary border-primary">
