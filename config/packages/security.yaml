@@ -38,7 +38,9 @@ security:
     - { path: ^/collections/me, roles: ROLE_ADMIN }
     - { path: ^/collections/edit, roles: ROLE_ADMIN }
     - { path: ^/collections/delete, roles: ROLE_ADMIN }
-    - { path: ^/item, roles: ROLE_ADMIN }
+    - { path: ^/item/new, roles: ROLE_ADMIN }
+    - { path: ^/item/edit, roles: ROLE_ADMIN }
+    - { path: ^/item/delete, roles: ROLE_ADMIN }
     - { path: ^/like, roles: ROLE_ADMIN }
     - { path: ^/comment, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
