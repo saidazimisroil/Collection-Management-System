@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Integer;
 use App\Entity\Item;
 use App\Entity\ItemCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,11 +50,27 @@ class ItemController extends AbstractController
         }
     
         $itemName = $request->request->get('name');
-    
+
         $item = new Item();
         $item->setName($itemName);
         $item->setItemCollection($collection);
         $item->setTags("Tags");
+
+        $intNames = $collection->getIntegers();
+        foreach ($intNames as $index =>$intName) {
+            $name = strtolower($intName);
+            if ($name) {
+                $intValue = $request->request->get('int' . ++$index);
+                
+                $int = new Integer();
+                $int->setName($name);
+                $int->setValue($intValue);
+                
+                $item->addInteger($int);
+
+                $this->em->persist($int);
+            }
+        }
     
         $this->em->persist($item);
         $this->em->flush();

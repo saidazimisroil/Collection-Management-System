@@ -34,9 +34,16 @@ class Item
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'Item', orphanRemoval: true)]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, Integer>
+     */
+    #[ORM\OneToMany(targetEntity: Integer::class, mappedBy: 'Item', orphanRemoval: true)]
+    private Collection $integers;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->integers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,6 +128,36 @@ class Item
             // set the owning side to null (unless already changed)
             if ($comment->getItem() === $this) {
                 $comment->setItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Integer>
+     */
+    public function getIntegers(): Collection
+    {
+        return $this->integers;
+    }
+
+    public function addInteger(Integer $integer): static
+    {
+        if (!$this->integers->contains($integer)) {
+            $this->integers->add($integer);
+            $integer->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInteger(Integer $integer): static
+    {
+        if ($this->integers->removeElement($integer)) {
+            // set the owning side to null (unless already changed)
+            if ($integer->getItem() === $this) {
+                $integer->setItem(null);
             }
         }
 

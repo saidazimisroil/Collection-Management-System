@@ -16,6 +16,15 @@
 						<span for="itemName" class="input-group-text">Item Name</span>
 						<input type="text" class="form-control" id="itemName" name="name" required>
 					</div>
+					{% for int in collection.integers %}
+						{% if int %}
+							<div class="input-group mb-2">
+								<span for="itemName" class="input-group-text">{{ int|capitalize }}</span>
+								<input type="number" class="form-control" id="int{{ loop.index }}" name="int{{ loop.index }}" required>
+							</div>
+						{% endif %}
+					{% endfor %}
+
 					<button type="submit" class="btn btn-success mt-2">Create</button>
 				</div>
 			</form>
