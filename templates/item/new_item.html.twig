@@ -24,6 +24,15 @@
 							</div>
 						{% endif %}
 					{% endfor %}
+					
+					{% for string in collection.strings %}
+						{% if string %}
+							<div class="input-group mb-2">
+								<span for="itemName" class="input-group-text">{{ string|capitalize }}</span>
+								<input type="text" class="form-control" id="string{{ loop.index }}" name="string{{ loop.index }}" required>
+							</div>
+						{% endif %}
+					{% endfor %}
 
 					<button type="submit" class="btn btn-success mt-2">Create</button>
 				</div>

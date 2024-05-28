@@ -40,10 +40,17 @@ class Item
     #[ORM\OneToMany(targetEntity: Integer::class, mappedBy: 'Item', orphanRemoval: true)]
     private Collection $integers;
 
+    /**
+     * @var Collection<int, StringField>
+     */
+    #[ORM\OneToMany(targetEntity: StringField::class, mappedBy: 'Item', orphanRemoval: true)]
+    private Collection $stringFields;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->integers = new ArrayCollection();
+        $this->stringFields = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,6 +165,36 @@ class Item
             // set the owning side to null (unless already changed)
             if ($integer->getItem() === $this) {
                 $integer->setItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StringField>
+     */
+    public function getStringFields(): Collection
+    {
+        return $this->stringFields;
+    }
+
+    public function addStringField(StringField $stringField): static
+    {
+        if (!$this->stringFields->contains($stringField)) {
+            $this->stringFields->add($stringField);
+            $stringField->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStringField(StringField $stringField): static
+    {
+        if ($this->stringFields->removeElement($stringField)) {
+            // set the owning side to null (unless already changed)
+            if ($stringField->getItem() === $this) {
+                $stringField->setItem(null);
             }
         }
 

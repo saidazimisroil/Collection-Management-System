@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Integer;
 use App\Entity\Item;
 use App\Entity\ItemCollection;
+use App\Entity\StringField;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -69,6 +70,22 @@ class ItemController extends AbstractController
                 $item->addInteger($int);
 
                 $this->em->persist($int);
+            }
+        }
+
+        $stringNames = $collection->getStrings();
+        foreach ($stringNames as $index =>$stringName) {
+            $name = strtolower($stringName);
+            if ($name) {
+                $stringValue = $request->request->get('string' . ++$index);
+                
+                $string = new StringField();
+                $string->setName($name);
+                $string->setValue($stringValue);
+                
+                $item->addStringField($string);
+
+                $this->em->persist($string);
             }
         }
     
