@@ -48,7 +48,7 @@ class DateField
 
     public function getStringValue(): ?string
     {
-        return $this->value->format('d-m-y');
+        return $this->value->format('Y.m.d');
     }
 
     public function setValue(\DateTimeImmutable $value): static
