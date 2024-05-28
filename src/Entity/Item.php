@@ -52,12 +52,19 @@ class Item
     #[ORM\OneToMany(targetEntity: DateField::class, mappedBy: 'Item', orphanRemoval: true)]
     private Collection $dateFields;
 
+    /**
+     * @var Collection<int, TextField>
+     */
+    #[ORM\OneToMany(targetEntity: TextField::class, mappedBy: 'Item', orphanRemoval: true)]
+    private Collection $textFields;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->integers = new ArrayCollection();
         $this->stringFields = new ArrayCollection();
         $this->dateFields = new ArrayCollection();
+        $this->textFields = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,6 +239,36 @@ class Item
             // set the owning side to null (unless already changed)
             if ($dateField->getItem() === $this) {
                 $dateField->setItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TextField>
+     */
+    public function getTextFields(): Collection
+    {
+        return $this->textFields;
+    }
+
+    public function addTextField(TextField $textField): static
+    {
+        if (!$this->textFields->contains($textField)) {
+            $this->textFields->add($textField);
+            $textField->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTextField(TextField $textField): static
+    {
+        if ($this->textFields->removeElement($textField)) {
+            // set the owning side to null (unless already changed)
+            if ($textField->getItem() === $this) {
+                $textField->setItem(null);
             }
         }
 

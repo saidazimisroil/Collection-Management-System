@@ -7,6 +7,7 @@ use App\Entity\Integer;
 use App\Entity\Item;
 use App\Entity\ItemCollection;
 use App\Entity\StringField;
+use App\Entity\TextField;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -87,6 +88,22 @@ class ItemController extends AbstractController
                 $item->addStringField($string);
 
                 $this->em->persist($string);
+            }
+        }
+
+        $textNames = $collection->getTexts();
+        foreach ($textNames as $index =>$textName) {
+            $name = strtolower($textName);
+            if ($name) {
+                $textValue = $request->request->get('text' . ++$index);
+                
+                $text = new TextField();
+                $text->setName($name);
+                $text->setValue($textValue);
+                
+                $item->addTextField($text);
+
+                $this->em->persist($text);
             }
         }
 
