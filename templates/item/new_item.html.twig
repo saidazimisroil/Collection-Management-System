@@ -33,6 +33,15 @@
 							</div>
 						{% endif %}
 					{% endfor %}
+					
+					{% for date in collection.dates %}
+						{% if date %}
+							<div class="input-group mb-2">
+								<span for="itemName" class="input-group-text">{{ date|capitalize }}</span>
+								<input type="date" class="form-control" id="date{{ loop.index }}" name="date{{ loop.index }}" required>
+							</div>
+						{% endif %}
+					{% endfor %}
 
 					<button type="submit" class="btn btn-success mt-2">Create</button>
 				</div>

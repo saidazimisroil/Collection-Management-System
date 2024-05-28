@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\DateField;
 use App\Entity\Integer;
 use App\Entity\Item;
 use App\Entity\ItemCollection;
@@ -86,6 +87,22 @@ class ItemController extends AbstractController
                 $item->addStringField($string);
 
                 $this->em->persist($string);
+            }
+        }
+
+        $dateNames = $collection->getDates();
+        foreach ($dateNames as $index =>$dateName) {
+            $name = strtolower($dateName);
+            if ($name) {
+                $dateValue = $request->request->get('date' . ($index + 1));
+                
+                $date = new DateField();
+                $date->setName($name);
+                $date->setValue(new \DateTimeImmutable($dateValue));
+                
+                $item->addDateField($date);
+
+                $this->em->persist($date);
             }
         }
     
