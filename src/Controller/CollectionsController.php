@@ -213,25 +213,4 @@ class CollectionsController extends AbstractController
 
         return $this->redirectToRoute('app_collections_my');
     }
-
-    #[Route('/search', name: 'app_collections_search', methods:['GET'])]
-    public function searchCollection(Request $request): Response
-    {
-        $prompt = $request->query->get('prompt');
-
-        // Perform search by name and description
-        $query = $this->em->createQuery(
-            'SELECT c 
-            FROM App\Entity\ItemCollection c 
-            WHERE c.name LIKE :prompt 
-            OR c.description LIKE :prompt'
-        )->setParameter('prompt', '%' . $prompt . '%');
-        
-        $collections = $query->getResult();
-
-        return $this->render('collections/search_collection.html.twig', [
-            'collections' => $collections,
-            'createRouteName' => $this->createRouteName,
-        ]);
-    }
 }

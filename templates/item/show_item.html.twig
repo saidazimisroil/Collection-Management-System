@@ -3,6 +3,9 @@
 {% block title %}About Item{% endblock %}
 
 {% block body %}
+  <div class="row px-5 mx-5">    
+		{% include 'partials/search_input.html.twig' with { 'prompt': "" }%}
+	</div>
 	<div class="container px-4 py-5" id="icon-grid">
 		<div class="container text-center">
 			<div class="row border-bottom">
@@ -32,5 +35,4 @@
 			{% include('comment/index.html.twig') with {'comment': comment} %}
 		{% endfor %}
 	{% endif %}
-	
 {% endblock %}

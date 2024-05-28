@@ -3,36 +3,31 @@
 {% block title %}Collections{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col">
-            <form action="{{ path('app_collections_search') }}" method="GET" class="input-group m-auto">
-                <span class="input-group-text">🔍</span>
-                <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" name="prompt" required>
-                <button class="btn btn-outline-info" type="submit" id="button-addon2">Search</button>
-            </form>
-        </div>
+  <div class="row">
+    {% include 'partials/search_input.html.twig' with { 'prompt': "" }%}
 
-        {% include 'partials/newBtn.html.twig' with { 'route': createRouteName } %}
-    </div>
-    {% if collections is empty %}
-        <h1 class="my-3">There are no collections!</h1>
-    {% else %}
-    <div class="row row-cols-1 row-cols-md-3 my-3 text-center">
-        {% for c in collections|reverse %}
-            <div class="col">
-                <div class="card mb-4 rounded-3 shadow-sm border-primary">
-                    <div class="card-header py-3 text-bg-primary border-primary">
-                        <h4 class="my-0 fw-normal">{{ c.name }}</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-unstyled mt-3 mb-4 p-auto">
-                            <li>{{ c.description }}</li>
-                        </ul>
-                        <a href="{{ path('app_collection', {id:c.id}) }}" type="button" class="w-100 btn btn-lg btn-primary">See items</a>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+    {% include 'partials/newBtn.html.twig' with { 'route': createRouteName } %}
+  </div>
+
+  {% if collections is empty %}
+    <h1 class="my-3">There are no collections!</h1>
+  {% else %}
+  	<div class="row row-cols-1 row-cols-md-3 my-3 text-center">
+      {% for c in collections|reverse %}
+          <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                  <div class="card-header py-3 text-bg-primary border-primary">
+                      <h4 class="my-0 fw-normal">{{ c.name }}</h4>
+                  </div>
+                  <div class="card-body">
+                      <ul class="list-unstyled mt-3 mb-4 p-auto">
+                          <li>{{ c.description }}</li>
+                      </ul>
+                      <a href="{{ path('app_collection', {id:c.id}) }}" type="button" class="w-100 btn btn-lg btn-primary">See items</a>
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+  	</div>
+  {% endif %}
 {% endblock %}
