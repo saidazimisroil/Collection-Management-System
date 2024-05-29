@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CategoriesEnum;
 use App\Entity\ItemCollection;
+use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,7 @@ class CollectionsController extends AbstractController
         return $this->render('collections/index.html.twig', [
             'collections' => $collections,
             'createRouteName' => $this->createRouteName,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
 
@@ -52,6 +54,7 @@ class CollectionsController extends AbstractController
             'userEmail' => $currentUser->eraseCredentials(),
             'collections' => $collections,
             'createRouteName' => $this->createRouteName,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
 
@@ -145,6 +148,7 @@ class CollectionsController extends AbstractController
 
         return $this->render('collections/collection.html.twig', [
             'collection' => $collection,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
 

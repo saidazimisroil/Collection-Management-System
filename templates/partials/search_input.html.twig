@@ -1,19 +1,26 @@
 <div class="col">
-  <form action="{{ path('app_search') }}" method="GET" class="input-group m-auto" onsubmit="return validateSearch()">
-    <span class="input-group-text">🔍</span>
-    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" name="prompt" value="{{ prompt }}" required>
-    <button class="btn btn-outline-info" type="submit" id="button-addon2">Search</button>
-  </form>
+	<form action="{{ path('app_search') }}" method="GET" class="input-group m-auto" onsubmit="return validateSearch()">
+		<span class="input-group-text">🔍</span>
+		<input type="text" class="form-control" placeholder="Search" aria-label="Search" list="datalistOptions" aria-describedby="button-addon2" name="prompt" value="{{ prompt }}" required>
+		<datalist id="datalistOptions">
+			{% if tags %}
+				{% for tag in tags %}
+					<option value="{{ tag }}"></option>
+				{% endfor %}
+			{% endif %}
+		</datalist>
+		<button class="btn btn-outline-info" type="submit" id="button-addon2">Search</button>
+	</form>
 </div>
 
 <script>
-  function validateSearch() {
-    const searchInput = document.querySelector('input[name="prompt"]').value.trim();
-    if (searchInput === "") {
-        alert("Please enter a valid search query.");
-			location.reload();
-        return false;
-    }
-    return true;
-  }
+	function validateSearch() {
+const searchInput = document.querySelector('input[name="prompt"]').value.trim();
+if (searchInput === "") {
+alert("Please enter a valid search query.");
+location.reload();
+return false;
+}
+return true;
+}
 </script>

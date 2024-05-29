@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Item;
-use App\Entity\Comment;
+use App\Entity\Tag;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -35,9 +34,16 @@ class SearchController extends AbstractController
             FROM App\Entity\Comment c 
             WHERE c.content LIKE :prompt'
         )->setParameter('prompt', '%' . $prompt . '%');
+        
+        $tagQuery = $this->em->createQuery(
+            'SELECT t 
+            FROM App\Entity\Tag t 
+            WHERE t.name LIKE :prompt'
+        )->setParameter('prompt', '%' . $prompt . '%');
 
         $items = $itemQuery->getResult();
         $comments = $commentQuery->getResult();
+        $tags = $tagQuery->getResult();
 
         // Collect unique items from comments
         $commentItems = [];
@@ -45,12 +51,19 @@ class SearchController extends AbstractController
             $commentItems[] = $comment->getItem();
         }
 
+        // Collect unique items from tags
+        $tagItems = [];
+        foreach ($tags as $tag) {
+            $tagItems = array_unique(array_merge($tagItems, $tag->getItems()->toArray()), SORT_REGULAR);
+        }
+
         // Merge and remove duplicate items
-        $result_items = array_unique(array_merge($items, $commentItems), SORT_REGULAR);
+        $result_items = array_unique(array_merge($items, $commentItems, $tagItems), SORT_REGULAR);
 
         return $this->render('search/index.html.twig', [
             'results_items' => $result_items,
             'prompt' => $prompt,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
 }

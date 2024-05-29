@@ -8,6 +8,7 @@ use App\Entity\Integer;
 use App\Entity\Item;
 use App\Entity\ItemCollection;
 use App\Entity\StringField;
+use App\Entity\Tag;
 use App\Entity\TextField;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,7 @@ class ItemController extends AbstractController
 
         return $this->render('item/show_item.html.twig', [
             'item' => $item,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
 
@@ -41,6 +43,7 @@ class ItemController extends AbstractController
 
         return $this->render('item/new_item.html.twig', [
             'collection' => $collection,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames(),
             'error' => '',
         ]);
     }
@@ -58,6 +61,7 @@ class ItemController extends AbstractController
         if(!$this->isItemNameUnique($itemName, $collection)){
             return $this->render('item/new_item.html.twig', [
                 'collection' => $collection,
+                'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames(),
                 'error' => "You already have created an item with the name '$itemName' in this collection",
             ]);
         }
@@ -65,7 +69,6 @@ class ItemController extends AbstractController
         $item = new Item();
         $item->setName($itemName);
         $item->setItemCollection($collection);
-        $item->setTags("Tags");
 
         $intNames = $collection->getIntegers();
         foreach ($intNames as $index =>$intName) {
@@ -146,6 +149,17 @@ class ItemController extends AbstractController
                 $this->em->persist($date);
             }
         }
+
+        $tags = $this->getTags($request);
+        foreach ($tags as $tagName) {
+            $existingTag = $this->em->getRepository(Tag::class)->findOneBy(['name' => $tagName]);
+            $tag = $existingTag ? $existingTag : new Tag();
+            $tag->setName($tagName);
+            $tag->addItem($item);
+            $this->em->persist($tag);
+
+            $item->addTag($tag);
+        }
     
         $this->em->persist($item);
         $this->em->flush();
@@ -153,6 +167,20 @@ class ItemController extends AbstractController
         return $this->render('item/show_item.html.twig', [
             'item' => $item,
         ]);
+    }
+
+    private function getTags($request) : array
+    {
+        $tags = [];
+        $tag = $request->request->get('tag1');
+        
+        $i = 1;
+        while ($tag) {
+            $tags[] = $tag;
+            $tag = $request->request->get('tag' . ++$i);
+        }
+
+        return $tags;
     }
     
     private function isItemNameUnique($name, $collection, $currentItemId = null) : bool

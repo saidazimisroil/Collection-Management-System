@@ -16,7 +16,18 @@
 				<td>
 					<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-success  link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.name }}</a>
 				</td>
-				<td>{{ item.tags }}</td>
+				{% if item.tags|length > 0 %}
+					<td>
+						{% for tag in item.tags %}
+							{{ tag.name }}
+						{% endfor %}
+					</td>
+				{% else %}
+					<td>
+						<p>no tags</p>
+					</td>
+				{% endif %}
+
 				<td>{{ item.likes ? item.likes.users|length : 0 }}</td>
 				<td>
 					{% if item.likes and app.user %}

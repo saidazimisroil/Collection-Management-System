@@ -68,7 +68,46 @@
 						{% endif %}
 					{% endfor %}
 
+
+					<div class="container">
+						<label for="exampleDataList" class="form-label">Tags</label>
+						<div id="tag-inputs">
+							<input class="form-control tag-input" list="datalistOptions" id="exampleDataList" autocomplete="off" name="tag1">
+						</div>
+						<datalist id="datalistOptions">
+							{% if tags %}
+								{% for tag in tags %}
+									<option value="{{ tag }}"></option>
+								{% endfor %}
+							{% endif %}
+						</datalist>
+					</div>
+
+					<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+					<script>
+						$(document).ready(function () { // Counter to keep track of the number of tag inputs
+let tagCounter = 1;
+
+// Function to add a new tag input
+function addTagInput() {
+tagCounter++;
+const newInput = $('<input class="form-control tag-input mt-2" list="datalistOptions" autocomplete="off">').attr('name', 'tag' + tagCounter);
+$('#tag-inputs').append(newInput);
+}
+
+// Event listener for tag inputs
+$('#tag-inputs').on('input', '.tag-input', function () {
+const input = $(this);
+// Check if the input is the last one and not empty
+if (input.is(':last-child') && input.val().length > 0) {
+addTagInput();
+}
+});
+});
+					</script>
 					<button type="submit" class="btn btn-success mt-2">Create</button>
 				</div>
-			</form>
-		{% endblock %}
+			</div>
+		</div>
+	</form>
+{% endblock %}

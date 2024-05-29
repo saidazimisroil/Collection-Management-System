@@ -1,9 +1,10 @@
 {% extends "base.html.twig" %}
 
-{% block title %}About Item{% endblock %}
+{% block title %}About Item
+{% endblock %}
 
 {% block body %}
-  <div class="row px-5 mx-5">    
+	<div class="row px-5 mx-5">
 		{% include 'partials/search_input.html.twig' with { 'prompt': "" }%}
 	</div>
 	<div class="container px-4 py-5" id="icon-grid">
@@ -13,23 +14,29 @@
 					<h2 class="col-6">{{ item.name }}</h2>
 				</div>
 				<div class="col">
-					<h4 class="col-6">Likes: {{ item.likes ? item.likes.users|length : 0 }}</h4>
+					<h4 class="col-6">Likes:
+						{{ item.likes ? item.likes.users|length : 0 }}</h4>
 				</div>
 			</div>
 		</div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-      <div class="col d-flex align-items-start">
-        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
-        <div>
-          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Tags</h3>
-          <p>{{ item.tags }}</p>
-        </div>
-      </div>
+		<h3>Tags</h3>
+		<div class="btn-group">
+			{% if item.tags|length > 0 %}
+				{% for tag in item.tags %}
+					<button class="btn btn-primary btn-sm">{{ tag.name }}</button>
+				{% endfor %}
+			{% else %}
+				<h6>no tags</h6>
+			{% endif %}
+		</div>
 
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
 			{% for int in item.integers %}
 				<div class="col d-flex align-items-start">
-					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
+					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
+						<use xlink:href="#bootstrap"></use>
+					</svg>
 					<div>
 						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ int.name|capitalize }}</h3>
 						<p>{{ int.value }}</p>
@@ -39,7 +46,9 @@
 
 			{% for string in item.stringFields %}
 				<div class="col d-flex align-items-start">
-					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
+					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
+						<use xlink:href="#bootstrap"></use>
+					</svg>
 					<div>
 						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ string.name|capitalize }}</h3>
 						<p>{{ string.value }}</p>
@@ -49,7 +58,9 @@
 
 			{% for bool in item.boolFields %}
 				<div class="col d-flex align-items-start">
-					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
+					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
+						<use xlink:href="#bootstrap"></use>
+					</svg>
 					<div>
 						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ bool.name|capitalize }}</h3>
 						<p>{{ bool.value ? "Yes" : "No"}}</p>
@@ -59,7 +70,9 @@
 
 			{% for date in item.dateFields %}
 				<div class="col d-flex align-items-start">
-					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
+					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
+						<use xlink:href="#bootstrap"></use>
+					</svg>
 					<div>
 						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ date.name|capitalize }}</h3>
 						<p>{{ date.stringValue }}</p>
@@ -69,15 +82,17 @@
 
 			{% for text in item.textFields %}
 				<div class="col d-flex align-items-start">
-					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"></use></svg>
+					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
+						<use xlink:href="#bootstrap"></use>
+					</svg>
 					<div>
 						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ text.name|capitalize }}</h3>
 						<p>{{ text.value|nl2br }}</p>
 					</div>
 				</div>
 			{% endfor %}
-    </div>
-  </div>
+		</div>
+	</div>
 
 	{% include('comment/comment_form.html.twig') with {'item': item} %}
 	{% if item.comments %}

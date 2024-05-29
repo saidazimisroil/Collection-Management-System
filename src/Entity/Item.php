@@ -18,9 +18,6 @@ class Item
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $tags = null;
-
     #[ORM\ManyToOne(inversedBy: 'item')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ItemCollection $itemCollection = null;
@@ -64,6 +61,12 @@ class Item
     #[ORM\OneToMany(targetEntity: BoolField::class, mappedBy: 'Item', orphanRemoval: true)]
     private Collection $boolFields;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'items')]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -72,6 +75,7 @@ class Item
         $this->dateFields = new ArrayCollection();
         $this->textFields = new ArrayCollection();
         $this->boolFields = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,18 +91,6 @@ class Item
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getTags(): ?string
-    {
-        return $this->tags;
-    }
-
-    public function setTags(string $tags): static
-    {
-        $this->tags = $tags;
 
         return $this;
     }
@@ -307,6 +299,33 @@ class Item
             if ($boolField->getItem() === $this) {
                 $boolField->setItem(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeItem($this);
         }
 
         return $this;
