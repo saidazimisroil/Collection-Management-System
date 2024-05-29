@@ -181,7 +181,7 @@ class ItemController extends AbstractController
             $tags[] = rtrim($request->request->get('tag' . $i++));
         }
 
-        return $tags;
+        return array_unique($tags, SORT_REGULAR);
     }
     
     private function isItemNameUnique($name, $collection, $currentItemId = null) : bool
