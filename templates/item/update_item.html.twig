@@ -6,15 +6,60 @@
     <h3>Collection Name: {{ collection.name }}</h3>
     <form action={{ path('app_item_update', {'id': item.id} ) }} method="POST">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-9 p-5 bg-body-tertiary rounded-5">
-            <h2>Edit Item</h2>
-            <div class="input-group mb-2">
-                <span for="itemName" class="input-group-text">Item Name</span>
-                <input type="text" class="form-control" id="itemName" name="name" value="{{ item.name }}" required>
-            </div>
+          <div class="row">
+              <div class="col-md-9 p-5 bg-body-tertiary rounded-5">
+          <h2>Edit Item</h2>
+          <div class="input-group mb-2">
+              <span for="itemName" class="input-group-text">Item Name</span>
+              <input type="text" class="form-control" id="itemName" name="name" value="{{ item.name }}" required>
+          </div>
 
-            <button type="submit" class="btn btn-warning mt-2">Save</button>
+					{% for int in item.integers %}
+						{% if int %}
+							<div class="input-group mb-2">
+								<span for="int{{ loop.index }}" class="input-group-text">{{ int.name|capitalize }}</span>
+								<input type="number" class="form-control" id="int{{ loop.index }}" name="int{{ loop.index }}" value={{ int.value }} required>
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% for string in item.stringFields %}
+						{% if string %}
+							<div class="input-group mb-2">
+								<span for="string{{ loop.index }}" class="input-group-text">{{ string.name|capitalize }}</span>
+								<input type="text" class="form-control" id="string{{ loop.index }}" name="string{{ loop.index }}" value="{{ string.value }}" required>
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% for text in item.textFields %}
+						{% if text %}
+							<div class="form-floating">
+								<textarea class="form-control" placeholder="Leave a {{ text.name }} here" id="floatingTextarea2" style="height: 100px" name="text{{ loop.index }}">{{ text.value }}</textarea>
+								<label for="floatingTextarea2">{{ text.name|capitalize }}</label>
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% for bool in item.boolFields %}
+						{% if bool %}
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" {{ bool.value ? 'checked' : 'value=""' }} id="flexCheckDefault" name="bool{{loop.index}}">
+								<label class="form-check-label" for="flexCheckDefault">{{ bool.name }}</label>
+							</div>
+						{% endif %}
+					{% endfor %}
+					
+					{% for date in item.dateFields %}
+						{% if date %}
+							<div class="input-group mb-2">
+								<span for="date{{ loop.index }}" class="input-group-text">{{ date.name|capitalize }}</span>
+								<input type="date" class="form-control" id="date{{ loop.index }}" name="date{{ loop.index }}" required>
+							</div>
+						{% endif %}
+					{% endfor %}
+
+          <button type="submit" class="btn btn-warning mt-2">Save</button>
         </div>
     </form>
 {% endblock %}

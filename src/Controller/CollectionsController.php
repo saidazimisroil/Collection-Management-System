@@ -58,7 +58,9 @@ class CollectionsController extends AbstractController
     #[Route('/me/create', name: 'app_create_collection', methods:['GET'])]
     public function create(): Response
     {
-        return $this->render('collections/create_collection.html.twig');
+        return $this->render('collections/create_collection.html.twig', [
+            'error' => '',
+        ]);
     }
     
     #[Route('/me/create', name: 'app_store_collection', methods: ['POST'])]
@@ -66,9 +68,17 @@ class CollectionsController extends AbstractController
     {
         $user = $this->security->getUser();
 
+        $name = $request->request->get('name');
+
+        if(!$this->isCollectionNameUnique($name)) {
+            return $this->render('collections/create_collection.html.twig', [
+                'error' => 'You already have a collection with name: ' . $name,
+            ]);
+        }
+
         $collection = new ItemCollection();
-        $collection->setName($request->request->get('name'));
-        $collection->setDescription($request->request->get('description'));
+        $collection->setName($name);
+        $collection->setDescription(rtrim($request->request->get('description')));
         $collection->setCategory($request->request->get('category'));
         $collection->setUser($user);
 
@@ -108,6 +118,23 @@ class CollectionsController extends AbstractController
 
         $this->addFlash('success', 'Collection created successfully!');
         return $this->redirectToRoute('app_collections_my');
+    }
+    private function isCollectionNameUnique($name) : bool
+    {
+        $currentUser = $this->security->getUser();
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $currentUser->getUserIdentifier()]);
+
+        $collections = $this->em->getRepository(ItemCollection::class)->findBy(['user' => $user->getId()]);
+        if (!$collections) {
+            return true;
+        }
+        
+        foreach ($collections as $collection) {
+            if ($collection->getName() === $name) {
+                return false;
+            }
+        }
+        return true;
     }
     
     #[Route('/{id<\d+>}', name: 'app_collection')]

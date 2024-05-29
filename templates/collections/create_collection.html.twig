@@ -1,59 +1,75 @@
 {% extends "base.html.twig" %}
 
-{% block title %}New Collection{% endblock %}
+{% block title %}New Collection
+{% endblock %}
 
 {% block body %}
-<form action="{{ path('app_create_collection') }}" method="POST" id="collectionForm">
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-9 p-5 bg-body-tertiary rounded-5">
-      <h2>New Collection</h2>
-      <div class="input-group mb-2">
-        <span for="collectionName" class="input-group-text">Collection Name</span>
-        <input type="text" class="form-control" id="collectionName" name="name" required>
-      </div>
-      <div class="form-floating mb-2">
-        <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea2" name="description" style="height: 100px" required></textarea>
-        <label for="floatingTextarea2">Description</label>
-      </div>
-      <div class="input-group mb-2">
-        <label for="collectionCategory" class="input-group-text">Category</label>
-        <select class="form-select" id="collectionCategory" name="category">
-          <option value="Other">Other</option>
-          <option value="Books">Books</option>
-          <option value="Signs">Signs</option>
-          <option value="Silverware">Silverware</option>
-        </select>
-      </div>
-      
-      <!-- Custom field containers -->
-      <div id="integerFieldsContainer"></div>
-      <div id="stringFieldsContainer"></div>
-      <div id="textFieldsContainer"></div>
-      <div id="boolFieldsContainer"></div>
-      <div id="dateFieldsContainer"></div>
-    
-      <button type="submit" class="btn btn-success mt-2">Create</button>
+	{% if error %}
+		<div class="alert alert-warning" role="alert">
+			{{ error }}
 		</div>
+	{% endif %}
+	<form action="{{ path('app_create_collection') }}" method="POST" id="collectionForm">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-9 p-5 bg-body-tertiary rounded-5">
+					<h2>New Collection</h2>
+					<div class="input-group mb-2">
+						<span for="collectionName" class="input-group-text">Collection Name</span>
+						<input type="text" class="form-control" id="collectionName" name="name" required>
+					</div>
+					<div class="form-floating mb-2">
+						<textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea2" name="description" style="height: 100px" required></textarea>
+						<label for="floatingTextarea2">Description</label>
+					</div>
+					<div class="input-group mb-2">
+						<label for="collectionCategory" class="input-group-text">Category</label>
+						<select class="form-select" id="collectionCategory" name="category">
+							<option value="Other">Other</option>
+							<option value="Books">Books</option>
+							<option value="Signs">Signs</option>
+							<option value="Silverware">Silverware</option>
+						</select>
+					</div>
 
-    {# Custom fields #}
-		<div class="col-md-2 m-auto">
-      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('integer')">+ Add integer field</button></div>
-      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('string')">+ Add string field</button></div>
-      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('text')">+ Add text field</button></div>
-      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('bool')">+ Add bool field</button></div>
-      <div class="row my-4"><button type="button" class="btn btn-outline-primary" onclick="addField('date')">+ Add date field</button></div>
+					<!-- Custom field containers -->
+					<div id="integerFieldsContainer"></div>
+					<div id="stringFieldsContainer"></div>
+					<div id="textFieldsContainer"></div>
+					<div id="boolFieldsContainer"></div>
+					<div id="dateFieldsContainer"></div>
+
+					<button type="submit" class="btn btn-success mt-2">Create</button>
+				</div>
+
+				{# Custom fields #}
+				<div class="col-md-2 m-auto">
+					<div class="row my-4">
+						<button type="button" class="btn btn-outline-primary" onclick="addField('integer')">+ Add integer field</button>
+					</div>
+					<div class="row my-4">
+						<button type="button" class="btn btn-outline-primary" onclick="addField('string')">+ Add string field</button>
+					</div>
+					<div class="row my-4">
+						<button type="button" class="btn btn-outline-primary" onclick="addField('text')">+ Add text field</button>
+					</div>
+					<div class="row my-4">
+						<button type="button" class="btn btn-outline-primary" onclick="addField('bool')">+ Add bool field</button>
+					</div>
+					<div class="row my-4">
+						<button type="button" class="btn btn-outline-primary" onclick="addField('date')">+ Add date field</button>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-</form>
+	</form>
 
-<script>
-const maxFieldsCount = 3;
+	<script>
+		const maxFieldsCount = 3;
 
 function addField(type) {
-  const container = document.getElementById(type + 'FieldsContainer');
-  if (container.children.length < maxFieldsCount) {
+const container = document.getElementById(type + 'FieldsContainer');
+if (container.children.length<maxFieldsCount) {
     const fieldIndex = container.children.length + 1;
     const field = createField(container, type, fieldIndex);
     container.appendChild(field);
@@ -91,22 +107,27 @@ function createField(container, type, index) {
 function updateFields(container, type) {
   const fields = container.querySelectorAll('div');
   fields.forEach((field, index) => {
-    const i = index + 1;
-    field.querySelector('input').name = type + 'Field' + i;
-    field.querySelector('input').placeholder = 'Enter name of the ' + i + ' ' + type + ' field:';
-  });
+const i = index + 1;
+field.querySelector('input').name = type + 'Field' + i;
+field.querySelector('input').placeholder = 'Enter name of the ' + i + ' ' + type + ' field:';
+}) 
+
+
+
+
+
 }
 
 function updateAddButtonVisibility(type) {
-  const container = document.getElementById(type + 'FieldsContainer');
-  const addButton = document.querySelector('button[onclick="addField(\'' + type + '\')"]');
-  if (container.children.length >= maxFieldsCount) {
-    addButton.style.display = 'none';
-  } else {
-    addButton.style.display = 'inline-block';
-  }
+const container = document.getElementById(type + 'FieldsContainer');
+const addButton = document.querySelector('button[onclick="addField(\'' + type + '\')"]');
+if (container.children.length >= maxFieldsCount) {
+addButton.style.display = 'none';
+} else {
+addButton.style.display = 'inline-block';
 }
-</script>
+}
+	</script>
 
 
 {% endblock %}
