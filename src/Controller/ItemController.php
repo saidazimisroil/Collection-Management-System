@@ -150,17 +150,20 @@ class ItemController extends AbstractController
         $this->em->persist($item);
         $this->em->flush();
     
-        return $this->redirectToRoute('app_collection', ['id' => $id]);
+        return $this->render('item/show_item.html.twig', [
+            'item' => $item,
+        ]);
     }
-    private function isItemNameUnique($name, $collection) : bool
+    
+    private function isItemNameUnique($name, $collection, $currentItemId = null) : bool
     {
         $items = $collection->getItem();
         if (!$items) {
             return true;
         }
-        
+    
         foreach ($items as $item) {
-            if (strtolower($item->getName()) === strtolower($name)) {
+            if ($item->getId() !== $currentItemId && strtolower($item->getName()) === strtolower($name)) {
                 return false;
             }
         }
@@ -181,6 +184,7 @@ class ItemController extends AbstractController
         return $this->render('item/update_item.html.twig', [
             'item' => $item,
             'collection' => $collection,
+            'error' => '',
         ]);
     }
 
@@ -188,19 +192,119 @@ class ItemController extends AbstractController
     public function saveChanges(int $id, Request $request): Response
     {
         $item = $this->em->getRepository(Item::class)->find($id);
-
+    
+        if (!$item) {
+            throw $this->createNotFoundException('The item does not exist');
+        }
+    
         $collection = $item->getItemCollection();
         $currentUser = $this->security->getUser();
         if($currentUser !== $collection->getUser()){
             return $this->redirectToRoute('app_collections_my');
         }
-
-        $item->setName($request->request->get('name'));
-
+    
+        $itemName = $request->request->get('name');
+        if(!$this->isItemNameUnique($itemName, $collection, $item->getId())){
+            return $this->render('item/update_item.html.twig', [
+                'item' => $item,
+                'collection' => $collection,
+                'error' => "You already have an item with the name '$itemName' in this collection",
+            ]);
+        }
+    
+        $item->setName($itemName);
+    
+        $intNames = $collection->getIntegers();
+        foreach ($intNames as $index => $intName) {
+            $name = strtolower($intName);
+            if ($name) {
+                $intValue = $request->request->get('int' . ++$index);
+    
+                $int = $item->getIntegers()->filter(fn($i) => $i->getName() === $name)->first();
+                if (!$int) {
+                    $int = new Integer();
+                    $int->setName($name);
+                    $item->addInteger($int);
+                }
+                $int->setValue($intValue);
+                $this->em->persist($int);
+            }
+        }
+    
+        $stringNames = $collection->getStrings();
+        foreach ($stringNames as $index => $stringName) {
+            $name = strtolower($stringName);
+            if ($name) {
+                $stringValue = $request->request->get('string' . ++$index);
+    
+                $string = $item->getStringFields()->filter(fn($s) => $s->getName() === $name)->first();
+                if (!$string) {
+                    $string = new StringField();
+                    $string->setName($name);
+                    $item->addStringField($string);
+                }
+                $string->setValue($stringValue);
+                $this->em->persist($string);
+            }
+        }
+    
+        $textNames = $collection->getTexts();
+        foreach ($textNames as $index => $textName) {
+            $name = strtolower($textName);
+            if ($name) {
+                $textValue = $request->request->get('text' . ++$index);
+    
+                $text = $item->getTextFields()->filter(fn($t) => $t->getName() === $name)->first();
+                if (!$text) {
+                    $text = new TextField();
+                    $text->setName($name);
+                    $item->addTextField($text);
+                }
+                $text->setValue(rtrim($textValue));
+                $this->em->persist($text);
+            }
+        }
+    
+        $boolNames = $collection->getBools();
+        foreach ($boolNames as $index => $boolName) {
+            $name = strtolower($boolName);
+            if ($name) {
+                $boolValue = $request->request->has('bool' . ++$index) ? true : false;
+    
+                $bool = $item->getBoolFields()->filter(fn($b) => $b->getName() === $name)->first();
+                if (!$bool) {
+                    $bool = new BoolField();
+                    $bool->setName($name);
+                    $item->addBoolField($bool);
+                }
+                $bool->setValue($boolValue);
+                $this->em->persist($bool);
+            }
+        }
+    
+        $dateNames = $collection->getDates();
+        foreach ($dateNames as $index => $dateName) {
+            $name = strtolower($dateName);
+            if ($name) {
+                $dateValue = $request->request->get('date' . ($index + 1));
+    
+                $date = $item->getDateFields()->filter(fn($d) => $d->getName() === $name)->first();
+                if (!$date) {
+                    $date = new DateField();
+                    $date->setName($name);
+                    $item->addDateField($date);
+                }
+                $date->setValue(new \DateTimeImmutable($dateValue));
+                $this->em->persist($date);
+            }
+        }
+    
         $this->em->persist($item);
         $this->em->flush();
-
-        return $this->redirectToRoute('app_collection', ['id' => $collection->getId()]);
+    
+        return $this->render('item/show_item.html.twig', [
+            'item' => $item,
+        ]);
     }
 
     #[Route('/delete/{id<\d+>}', name: 'app_item_delete', methods:['GET'])]

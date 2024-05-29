@@ -1,18 +1,26 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Edit Item{% endblock %}
+{% block title %}Edit Item
+{% endblock %}
 
 {% block body %}
-    <h3>Collection Name: {{ collection.name }}</h3>
-    <form action={{ path('app_item_update', {'id': item.id} ) }} method="POST">
-        <div class="container-fluid">
-          <div class="row">
-              <div class="col-md-9 p-5 bg-body-tertiary rounded-5">
-          <h2>Edit Item</h2>
-          <div class="input-group mb-2">
-              <span for="itemName" class="input-group-text">Item Name</span>
-              <input type="text" class="form-control" id="itemName" name="name" value="{{ item.name }}" required>
-          </div>
+	{% if error %}
+		<div class="alert alert-warning" role="alert">
+			{{ error }}
+		</div>
+	{% endif %}
+
+	<h3>Collection Name:
+		{{ collection.name }}</h3>
+	<form action={{ path('app_item_update', {'id': item.id} ) }} method="POST">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-9 p-5 bg-body-tertiary rounded-5">
+					<h2>Edit Item</h2>
+					<div class="input-group mb-2">
+						<span for="itemName" class="input-group-text">Item Name</span>
+						<input type="text" class="form-control" id="itemName" name="name" value="{{ item.name }}" required>
+					</div>
 
 					{% for int in item.integers %}
 						{% if int %}
@@ -22,7 +30,7 @@
 							</div>
 						{% endif %}
 					{% endfor %}
-					
+
 					{% for string in item.stringFields %}
 						{% if string %}
 							<div class="input-group mb-2">
@@ -31,7 +39,7 @@
 							</div>
 						{% endif %}
 					{% endfor %}
-					
+
 					{% for text in item.textFields %}
 						{% if text %}
 							<div class="form-floating">
@@ -40,7 +48,7 @@
 							</div>
 						{% endif %}
 					{% endfor %}
-					
+
 					{% for bool in item.boolFields %}
 						{% if bool %}
 							<div class="form-check">
@@ -49,17 +57,17 @@
 							</div>
 						{% endif %}
 					{% endfor %}
-					
+
 					{% for date in item.dateFields %}
 						{% if date %}
 							<div class="input-group mb-2">
 								<span for="date{{ loop.index }}" class="input-group-text">{{ date.name|capitalize }}</span>
-								<input type="date" class="form-control" id="date{{ loop.index }}" name="date{{ loop.index }}" required>
+								<input type="date" class="form-control" id="date{{ loop.index }}" name="date{{ loop.index }}" value="{{ date.value|date('Y-m-d') }}" required>
 							</div>
 						{% endif %}
 					{% endfor %}
 
-          <button type="submit" class="btn btn-warning mt-2">Save</button>
-        </div>
-    </form>
-{% endblock %}
+					<button type="submit" class="btn btn-warning mt-2">Save</button>
+				</div>
+			</form>
+		{% endblock %}
