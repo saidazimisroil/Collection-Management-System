@@ -166,6 +166,7 @@ class ItemController extends AbstractController
     
         return $this->render('item/show_item.html.twig', [
             'item' => $item,
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames(),
         ]);
     }
 
