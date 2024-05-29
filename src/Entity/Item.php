@@ -330,4 +330,13 @@ class Item
 
         return $this;
     }
+
+    public function removeAllTags(): static
+    {
+        foreach ($this->tags as $tag) {
+            $this->removeTag($tag);
+        }
+
+        return $this;
+    }
 }

@@ -152,13 +152,15 @@ class ItemController extends AbstractController
 
         $tags = $this->getTags($request);
         foreach ($tags as $tagName) {
-            $existingTag = $this->em->getRepository(Tag::class)->findOneBy(['name' => $tagName]);
-            $tag = $existingTag ? $existingTag : new Tag();
-            $tag->setName($tagName);
-            $tag->addItem($item);
-            $this->em->persist($tag);
-
-            $item->addTag($tag);
+            if ($tagName) {
+                $existingTag = $this->em->getRepository(Tag::class)->findOneBy(['name' => $tagName]);
+                $tag = $existingTag ? $existingTag : new Tag();
+                $tag->setName($tagName);
+                $tag->addItem($item);
+                $this->em->persist($tag);
+                
+                $item->addTag($tag);
+            }
         }
     
         $this->em->persist($item);
@@ -173,12 +175,10 @@ class ItemController extends AbstractController
     private function getTags($request) : array
     {
         $tags = [];
-        $tag = $request->request->get('tag1');
         
         $i = 1;
-        while ($tag) {
-            $tags[] = $tag;
-            $tag = $request->request->get('tag' . ++$i);
+        while ($i < $request->request->get('tag_counter')) {
+            $tags[] = rtrim($request->request->get('tag' . $i++));
         }
 
         return $tags;
@@ -214,6 +214,7 @@ class ItemController extends AbstractController
             'item' => $item,
             'collection' => $collection,
             'error' => '',
+            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames(),
         ]);
     }
 
@@ -238,6 +239,7 @@ class ItemController extends AbstractController
                 'item' => $item,
                 'collection' => $collection,
                 'error' => "You already have an item with the name '$itemName' in this collection",
+                'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames(),
             ]);
         }
     
@@ -327,13 +329,25 @@ class ItemController extends AbstractController
                 $this->em->persist($date);
             }
         }
+
+        $item->removeAllTags();
+        $tags = $this->getTags($request);
+        foreach ($tags as $tagName) {
+            if ($tagName) {
+                $existingTag = $this->em->getRepository(Tag::class)->findOneBy(['name' => $tagName]);
+                $tag = $existingTag ? $existingTag : new Tag();
+                $tag->setName($tagName);
+                $tag->addItem($item);
+                $this->em->persist($tag);
+                
+                $item->addTag($tag);
+            }
+        }
     
         $this->em->persist($item);
         $this->em->flush();
     
-        return $this->render('item/show_item.html.twig', [
-            'item' => $item,
-        ]);
+        return $this->redirectToRoute('app_item_show', ['id' => $id]);
     }
 
     #[Route('/delete/{id<\d+>}', name: 'app_item_delete', methods:['GET'])]
