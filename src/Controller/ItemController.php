@@ -41,6 +41,7 @@ class ItemController extends AbstractController
 
         return $this->render('item/new_item.html.twig', [
             'collection' => $collection,
+            'error' => '',
         ]);
     }
     
@@ -54,6 +55,12 @@ class ItemController extends AbstractController
         }
     
         $itemName = $request->request->get('name');
+        if(!$this->isItemNameUnique($itemName, $collection)){
+            return $this->render('item/new_item.html.twig', [
+                'collection' => $collection,
+                'error' => "You already have created an item with the name '$itemName' in this collection",
+            ]);
+        }
 
         $item = new Item();
         $item->setName($itemName);
@@ -144,7 +151,21 @@ class ItemController extends AbstractController
         $this->em->flush();
     
         return $this->redirectToRoute('app_collection', ['id' => $id]);
-    }    
+    }
+    private function isItemNameUnique($name, $collection) : bool
+    {
+        $items = $collection->getItem();
+        if (!$items) {
+            return true;
+        }
+        
+        foreach ($items as $item) {
+            if (strtolower($item->getName()) === strtolower($name)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     #[Route('/edit/{id<\d+>}', name: 'app_item_edit', methods:['GET'])]
     public function edit(int $id): Response
