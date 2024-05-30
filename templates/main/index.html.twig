@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Main page
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/01Programming/iTransition/CollectionManagementSystem/src/Controller/MainController.php</code></li>
-        <li>Your template at <code>D:/01Programming/iTransition/CollectionManagementSystem/templates/main/index.html.twig</code></li>
-    </ul>
-</div>
+	<h3>Latest Items</h3>
+	<div class="row">
+		{% for item in items %}
+			<div class="col-md-3 mb-3">
+				<div class="card h-100">
+					<div class="card-body">
+						<h5 class="card-title">
+							<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-secondary">{{ item.name }}</a>
+						</h5>
+						<p class="card-text">
+							<strong>Collection:</strong>
+							{{ item.itemCollection.name }}
+						</p>
+						<p class="card-text">
+							<strong>Author:</strong>
+							{{ item.itemCollection.user.name }}
+						</p>
+					</div>
+					<div class="card-footer">
+						<a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary">View Item</a>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
 {% endblock %}

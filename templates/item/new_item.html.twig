@@ -73,6 +73,7 @@
 						<div id="tag-inputs">
 							<input class="form-control tag-input" list="datalistOptions" id="exampleDataList" autocomplete="off" name="tag1">
 						</div>
+						<input type="hidden" id="tag-counter" name="tag_counter" value="1">
 						<datalist id="datalistOptions">
 							{% if tags %}
 								{% for tag in tags %}
@@ -90,6 +91,7 @@ let tagCounter = 1;
 // Function to add a new tag input
 function addTagInput() {
 tagCounter++;
+$('#tag-counter').val(tagCounter);
 const newInput = $('<input class="form-control tag-input mt-2" list="datalistOptions" autocomplete="off">').attr('name', 'tag' + tagCounter);
 $('#tag-inputs').append(newInput);
 }

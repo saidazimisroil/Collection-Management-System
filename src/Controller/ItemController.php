@@ -150,7 +150,7 @@ class ItemController extends AbstractController
             }
         }
 
-        $tags = $this->getTags($request);
+        $tags = $this->getTags($request);;
         foreach ($tags as $tagName) {
             if ($tagName) {
                 $existingTag = $this->em->getRepository(Tag::class)->findOneBy(['name' => $tagName]);
@@ -166,10 +166,7 @@ class ItemController extends AbstractController
         $this->em->persist($item);
         $this->em->flush();
     
-        return $this->render('item/show_item.html.twig', [
-            'item' => $item,
-            'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames(),
-        ]);
+        return $this->redirectToRoute('app_item_show', ['id' => $item->getId()]);
     }
 
     private function getTags($request) : array

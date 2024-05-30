@@ -1,26 +1,29 @@
 <div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-      <div class="col-md-3 mb-2 mb-md-0">
-        <a href={{ url("app_collections_index") }} class="d-inline-flex link-body-emphasis text-decoration-none">
-          <span class="fs-5">Collection Management</span>
-        </a>
-      </div>
+	<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+		<div class="col-md-3 mb-2 mb-md-0">
+			<a href={{ url("app_main") }} class="d-inline-flex link-body-emphasis text-decoration-none">
+				<span class="fs-5">Collection Management</span>
+			</a>
+		</div>
 
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href={{ url("app_collections_index") }} class="nav-link px-2 link-secondary">Home</a></li>
-        {% if app.user %}
-            <li><a href={{ url("app_collections_my") }} class="nav-link px-2">My Collections</a></li>
-            <li><a href={{ url("app_create_collection") }} class="nav-link px-2">New Collection</a></li>
-        {% endif %}
-      </ul>
+		<ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+			{% if app.user %}
+				<li>
+					<a href={{ url("app_collections_my") }} class="nav-link px-2">My Collections</a>
+				</li>
+				<li>
+					<a href={{ url("app_create_collection") }} class="nav-link px-2">New Collection</a>
+				</li>
+			{% endif %}
+		</ul>
 
-      <div class="col-md-3 text-end">
-        {% if app.user %}
-          <a href={{ logout_path() }} type="button" class="btn btn-outline-danger me-2">Logout</a>
-        {% else %}
-          <a href={{ url("app_login") }} type="button" class="btn btn-outline-primary me-2">Login</a>
-          <a href={{ url("app_register") }} type="button" class="btn btn-success">Sign-up</a>
-        {% endif %}
-      </div>
-    </header>
-  </div>
+		<div class="col-md-3 text-end">
+			{% if app.user %}
+				<a href={{ logout_path() }} type="button" class="btn btn-outline-danger me-2">Logout</a>
+			{% else %}
+				<a href={{ url("app_login") }} type="button" class="btn btn-outline-primary me-2">Login</a>
+				<a href={{ url("app_register") }} type="button" class="btn btn-success">Sign-up</a>
+			{% endif %}
+		</div>
+	</header>
+</div>
