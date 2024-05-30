@@ -1,5 +1,5 @@
 <div class="col">
-	<form action="{{ path('app_search') }}" method="GET" class="input-group m-auto" onsubmit="return validateSearch()">
+	<form action="{{ path('app_search') }}" method="GET" class="input-group m-auto my-5" onsubmit="return validateSearch()">
 		<span class="input-group-text">🔍</span>
 		<input type="text" class="form-control" placeholder="Search" aria-label="Search" list="datalistOptions" aria-describedby="button-addon2" name="prompt" value="{{ prompt }}" required>
 		<datalist id="datalistOptions">

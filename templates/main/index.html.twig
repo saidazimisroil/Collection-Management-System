@@ -4,29 +4,61 @@
 {% endblock %}
 
 {% block body %}
-	<h3>Latest Items</h3>
-	<div class="row">
-		{% for item in items %}
-			<div class="col-md-3 mb-3">
-				<div class="card h-100">
-					<div class="card-body">
-						<h5 class="card-title">
-							<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-secondary">{{ item.name }}</a>
-						</h5>
-						<p class="card-text">
-							<strong>Collection:</strong>
-							{{ item.itemCollection.name }}
-						</p>
-						<p class="card-text">
-							<strong>Author:</strong>
-							{{ item.itemCollection.user.name }}
-						</p>
-					</div>
-					<div class="card-footer">
-						<a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary">View Item</a>
+	<div class="row px-5 mx-5">
+		{% include 'partials/search_input.html.twig' with {'prompt' : prompt, 'tags' : tags} %}
+	</div>
+	{% if items %}
+		<h3>Latest Items</h3>
+		<div class="row border-bottom py-5 mb-5">
+			{% for item in items %}
+				<div class="col-md-3 mb-3 shadow-lg">
+					<div class="card h-100">
+						<div class="card-body">
+							<h5 class="card-title">
+								<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-secondary">{{ item.name }}</a>
+							</h5>
+							<p class="card-text">
+								<strong>Collection:</strong>
+								{{ item.itemCollection.name }}
+							</p>
+							<p class="card-text">
+								<strong>Author:</strong>
+								{{ item.itemCollection.user.name }}
+							</p>
+						</div>
+						<div class="card-footer">
+							<a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary">View Item</a>
+						</div>
 					</div>
 				</div>
-			</div>
-		{% endfor %}
-	</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	{% if collections %}
+		<h3>Top Largest Collections</h3>
+
+		<div class="row border-bottom my-5 pb-5">
+			{% for collection in collections %}
+				<div class="col-sm-4 mb-3 shadow-lg">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">{{ collection.name }}</h5>
+							<p class="card-text">{{ collection.description }}</p>
+							<a href={{ path('app_collection', {id: collection.id} ) }} class="btn btn-primary">Go to collection</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	{% if tags %}
+		<h3>Tag Cloud</h3>
+		<div class="container my-5">
+			{% for tag in tags %}
+				<a href={{ path('app_search', {prompt: tag} ) }} class="btn btn-primary mb-3 shadow-lg">{{ tag }}</a>
+			{% endfor %}
+		</div>
+	{% endif %}
 {% endblock %}

@@ -22,6 +22,14 @@ class SearchController extends AbstractController
     {
         $prompt = $request->query->get('prompt');
 
+        if (!$prompt) {
+            return $this->render('search/index.html.twig', [
+                'results_items' => [],
+                'prompt' => '',
+                'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
+            ]);
+        }
+
         // Perform search by name in Item and content in Comment
         $itemQuery = $this->em->createQuery(
             'SELECT i 

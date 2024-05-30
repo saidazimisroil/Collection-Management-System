@@ -7,47 +7,49 @@
 	<div class="row px-5 mx-5">
 		{% include 'partials/search_input.html.twig' with {'prompt' : prompt, 'tags' : tags} %}
 	</div>
-	<div class="container my-5">
-		<h2 class="mb-4">Search Results</h2>
-		{% if results_items is empty %}
-			<div class="alert alert-warning" role="alert">
-				No results found for your search.
-			</div>
-		{% else %}
-			<div class="row">
-				{% for item in results_items %}
-					<div class="col-md-3 mb-3">
-						<div class="card h-100">
-							<div class="card-body">
-								<h5 class="card-title">
-									<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-secondary">{{ item.name }}</a>
-								</h5>
-								<p class="card-text">
-									<strong>Collection:</strong>
-									{{ item.itemCollection.name }}
-								</p>
-								<p class="card-text">
-									<strong>Tags:</strong>
-									{% if item.tags|length > 0 %}
-										{% for tag in item.tags %}
-											{{ tag.name }}
-										{% endfor %}
-									{% else %}
-										no tags
-									{% endif %}
-								</p>
-								<p class="card-text">
-									<strong>Likes:</strong>
-									{{ item.likes ? item.likes.users|length : 0 }}
-								</p>
-							</div>
-							<div class="card-footer">
-								<a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary">View Item</a>
+	{% if prompt %}
+		<div class="container my-5">
+			<h2 class="mb-4">Search Results</h2>
+			{% if results_items is empty %}
+				<div class="alert alert-warning" role="alert">
+					No results found for your search.
+				</div>
+			{% else %}
+				<div class="row">
+					{% for item in results_items %}
+						<div class="col-md-3 mb-3">
+							<div class="card h-100">
+								<div class="card-body">
+									<h5 class="card-title">
+										<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-secondary">{{ item.name }}</a>
+									</h5>
+									<p class="card-text">
+										<strong>Collection:</strong>
+										{{ item.itemCollection.name }}
+									</p>
+									<p class="card-text">
+										<strong>Tags:</strong>
+										{% if item.tags|length > 0 %}
+											{% for tag in item.tags %}
+												{{ tag.name }}
+											{% endfor %}
+										{% else %}
+											no tags
+										{% endif %}
+									</p>
+									<p class="card-text">
+										<strong>Likes:</strong>
+										{{ item.likes ? item.likes.users|length : 0 }}
+									</p>
+								</div>
+								<div class="card-footer">
+									<a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary">View Item</a>
+								</div>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
-			</div>
-		{% endif %}
-	</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+		</div>
+	{% endif %}
 {% endblock %}
