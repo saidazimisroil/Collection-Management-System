@@ -214,7 +214,7 @@ class CollectionsController extends AbstractController
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
 
         $collection->setName($request->request->get('name'));
-        $collection->setDescription($request->request->get('description'));
+        $collection->setDescription(rtrim($request->request->get('description')));
         $collection->setCategory($request->request->get('category'));
         $collection->setIntegers([$request->request->get('integerField1'), $request->request->get('integerField2'), $request->request->get('integerField3')]);
         $collection->setStrings([$request->request->get('stringField1'), $request->request->get('stringField2'), $request->request->get('stringField3')]);

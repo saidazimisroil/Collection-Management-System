@@ -12,8 +12,8 @@
 		class="px-4 py-5 my-5 text-center">
 		{# <img class="d-block mx-auto mb-1" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> #}
 		<h1 class="display-5 fw-bold text-body-emphasis">{{ collection.name }}</h1>
-		<div class="col-lg-6 mx-auto">
-			<p class="lead mb-1">{{ collection.description }}</p>
+		<div class="col-lg-8 mx-auto">
+			<p class="lead mb-1">{{ collection.description|nl2br }}</p>
 			<p class="lead mb-1">Category:
 				{{ collection.category }}</p>
 
@@ -24,11 +24,12 @@
 					<a href={{ path('app_collection_delete', {id:collection.id} ) }} type="button" class="btn btn-outline-danger btn-lg px-4">Delete Collection</a>
 				</div>
 			{% endif %}
-
 		</div>
 
 		{% if collection.item is not empty %}
 			{% include "item/index.html.twig" with {'collection': collection}%}
+		{% else %}
+			<p class="h3 my-5">No items in this collection</p>
 		{% endif %}
 	</div>
 {% endblock %}

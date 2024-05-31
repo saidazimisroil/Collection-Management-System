@@ -268,7 +268,7 @@ class ItemController extends AbstractController
                 $string = $item->getStringFields()->filter(fn($s) => $s->getName() === $name)->first();
                 if (!$string) {
                     $string = new StringField();
-                    $string->setName($name);
+                    $string->setName(rtrim($name));
                     $item->addStringField($string);
                 }
                 $string->setValue($stringValue);

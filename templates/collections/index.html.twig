@@ -18,14 +18,14 @@
 	{% else %}
 		<div class="row row-cols-1 row-cols-md-3 my-3 text-center">
 			{% for c in collections|reverse %}
-				<div class="col">
+				<div class="col my-auto">
 					<div class="card mb-4 rounded-3 shadow-sm border-primary">
 						<div class="card-header py-3 text-bg-primary border-primary">
 							<h4 class="my-0 fw-normal">{{ c.name }}</h4>
 						</div>
 						<div class="card-body">
 							<ul class="list-unstyled mt-3 mb-4 p-auto">
-								<li>{{ c.description|nl2br }}</li>
+								<li>{{ c.description }}</li>
 							</ul>
 							<a href="{{ path('app_collection', {id:c.id}) }}" type="button" class="w-100 btn btn-lg btn-primary">See items</a>
 						</div>
