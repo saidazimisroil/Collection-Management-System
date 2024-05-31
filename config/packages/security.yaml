@@ -36,14 +36,14 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/collections/me, roles: ROLE_ADMIN }
-    - { path: ^/collections/edit, roles: ROLE_ADMIN }
-    - { path: ^/collections/delete, roles: ROLE_ADMIN }
-    - { path: ^/item/new, roles: ROLE_ADMIN }
-    - { path: ^/item/edit, roles: ROLE_ADMIN }
-    - { path: ^/item/delete, roles: ROLE_ADMIN }
-    - { path: ^/like, roles: ROLE_ADMIN }
-    - { path: ^/comment, roles: ROLE_ADMIN }
+    - { path: ^/collections/me, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/collections/edit, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/collections/delete, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/item/new, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/item/edit, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/item/delete, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/like, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/comment, roles: [ROLE_USER, ROLE_ADMIN] }
 
 when@test:
   security:
