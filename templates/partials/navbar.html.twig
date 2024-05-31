@@ -7,6 +7,9 @@
 		</div>
 
 		<ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+			<li>
+				<a href={{ url("app_collections_index") }} class="nav-link px-2">All Collections</a>
+			</li>
 			{% if app.user %}
 				<li>
 					<a href={{ url("app_collections_my") }} class="nav-link px-2">My Collections</a>

@@ -4,6 +4,9 @@
 {% endblock %}
 
 {% block body %}
+	{% block head %}
+		<p class="h1">All Collections</p>
+	{% endblock %}
 	<div class="row">
 		{% include 'partials/search_input.html.twig' with { 'prompt': '', 'tags': tags }%}
 

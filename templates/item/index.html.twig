@@ -1,11 +1,29 @@
 <h2>Items</h2>
-<table class="table table-hover">
+<table class="table table-hover mx-auto">
 	<thead>
 		<tr>
 			<th scope="col">#</th>
 			<th scope="col">Name</th>
 			<th scope="col">Likes</th>
-			<th scope="col">Actions</th>
+
+			{% if collection.strings %}
+				{% for string in collection.strings %}
+					{% if string %}
+						<th scope="col">{{ string }}</th>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+
+			{% if collection.dates %}
+				{% for date in collection.dates %}
+					{% if date %}
+						<th scope="col">{{ date }}</th>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+			{% if app.user and app.user.email == collection.user.email %}
+				<th scope="col">Actions</th>
+			{% endif %}
 		</tr>
 	</thead>
 	<tbody>
@@ -16,12 +34,21 @@
 					<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-success  link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.name }}</a>
 				</td>
 				<td>{{ item.likes ? item.likes.users|length : 0 }}</td>
-				<td>
-					{% if app.user and app.user.email == collection.user.email %}
+
+				{% for string in item.stringFields %}
+					<td>{{ string.name }}</td>
+				{% endfor %}
+
+				{% for date in item.dateFields %}
+					<td>{{ date.name }}</td>
+				{% endfor %}
+
+				{% if app.user and app.user.email == collection.user.email %}
+					<td>
 						<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-warning">Edit</a>
 						<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-outline-danger">Delete</a>
-					{% endif %}
-				</td>
+					</td>
+				{% endif %}
 			</tr>
 		{% endfor %}
 	</tbody>
