@@ -7,24 +7,27 @@
 	<div class="row px-5 mx-5">
 		{% include 'partials/search_input.html.twig' with { 'prompt': "" }%}
 	</div>
-	<div class="container px-4 py-5" id="icon-grid">
-		<div class="container text-center">
-			<div class="row border-bottom">
-				<div class="col">
-					<h2 class="col-6">{{ item.name }}</h2>
-				</div>
-				<div class="col">
-					<h4 class="col-6">Likes:
-						{{ item.likes ? item.likes.users|length : 0 }}</h4>
-				</div>
+	<div class="px-4 pt-5 my-5 text-center border-bottom">
+		<h1 class="display-4 fw-bold text-body-emphasis">{{ item.name }}</h1>
+		<div class="col-lg-6 mx-auto">
+			<p class="lead mb-4">Likes:
+				{{ item.likes ? item.likes.users|length : 0 }}</p>
+			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+				{% include "partials/like_btn.html.twig" with {'item': item,} %}
+				{% if app.user and app.user.email == item.itemCollection.user.email %}
+					<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-lg btn-warning">Edit</a>
+					<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-lg btn-outline-danger">Delete</a>
+				{% endif %}
 			</div>
 		</div>
+	</div>
 
-		<h3>Tags</h3>
-		<div class="btn-group">
+	<div class="container px-4 pb-5" id="icon-grid">
+		<p class="h2 mb-3">Tags</p>
+		<div class="container mb-5">
 			{% if item.tags|length > 0 %}
 				{% for tag in item.tags %}
-					<button class="btn btn-primary btn-sm">{{ tag.name }}</button>
+					<a href={{ path('app_search', {prompt: tag.name} ) }} class="btn btn-primary mb-3 shadow-lg">{{ tag.name }}</a>
 				{% endfor %}
 			{% else %}
 				<h6>no tags</h6>
@@ -94,6 +97,7 @@
 		</div>
 	</div>
 
+	<p class="h3">Comments</p>
 	{% include('comment/comment_form.html.twig') with {'item': item} %}
 	{% if item.comments %}
 		{% for comment in item.comments %}

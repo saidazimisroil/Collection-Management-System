@@ -4,7 +4,6 @@
 		<tr>
 			<th scope="col">#</th>
 			<th scope="col">Name</th>
-			<th scope="col">Tags</th>
 			<th scope="col">Likes</th>
 			<th scope="col">Actions</th>
 		</tr>
@@ -16,31 +15,8 @@
 				<td>
 					<a href="{{ path('app_item_show', {id: item.id}) }}" class="link-success  link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.name }}</a>
 				</td>
-				{% if item.tags|length > 0 %}
-					<td>
-						{% for tag in item.tags %}
-							{{ tag.name }}
-						{% endfor %}
-					</td>
-				{% else %}
-					<td>
-						<p>no tags</p>
-					</td>
-				{% endif %}
-
 				<td>{{ item.likes ? item.likes.users|length : 0 }}</td>
 				<td>
-					{% if item.likes and app.user %}
-						{% set doILiked = item.likes.users|filter(u => u.email == app.user.email)|first %}
-						{% if doILiked %}
-							<a href="{{ path('app_like', {id: item.id}) }}" class="btn btn-primary">👍 Like</a>
-						{% else %}
-							<a href="{{ path('app_like', {id: item.id}) }}" class="btn btn-outline-primary">👍 Like</a>
-						{% endif %}
-					{% else %}
-						<a href="{{ path('app_like', {id: item.id}) }}" class="btn btn-outline-primary">👍 Like</a>
-					{% endif %}
-
 					{% if app.user and app.user.email == collection.user.email %}
 						<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-warning">Edit</a>
 						<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-outline-danger">Delete</a>

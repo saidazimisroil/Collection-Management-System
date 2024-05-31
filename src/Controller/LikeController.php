@@ -67,6 +67,6 @@ class LikeController extends AbstractController
         }
 
         $collection = $item->getItemCollection();
-        return $this->redirectToRoute('app_collection', ['id' => $collection->getId()]);
+        return $this->redirectToRoute('app_item_show', ['id' => $id]);
     }
 }
