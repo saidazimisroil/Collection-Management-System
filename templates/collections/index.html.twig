@@ -27,7 +27,10 @@
 							<ul class="list-unstyled mt-3 mb-4 p-auto">
 								<li>{{ c.description }}</li>
 							</ul>
-							<a href="{{ path('app_collection', {id:c.id}) }}" type="button" class="w-100 btn btn-lg btn-primary">See items</a>
+
+							{% block actions %}{% endblock %}
+
+							<a href="{{ path('app_collection', {id:c.id}) }}" type="button" class="w-100 btn btn-primary mt-2">See items</a>
 						</div>
 					</div>
 				</div>

@@ -6,3 +6,9 @@
 {% block head %}
 	<p class="h1">My Collections</p>
 {% endblock %}
+
+{% block actions %}
+	<a href="{{ path('app_item_new', {id:c.id}) }}" type="button" class="btn btn-sm btn-outline-success mt-3">➕</a>
+	<a href="{{ path('app_collection_update_form', {id:c.id}) }}" type="button" class="btn btn-sm btn-outline-warning mt-3">✏️</a>
+	<a href="{{ path('app_collection_delete', {id:c.id}) }}" type="button" class="btn btn-sm btn-outline-danger mt-3">🗑️</a>
+{% endblock %}

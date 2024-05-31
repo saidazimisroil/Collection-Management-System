@@ -17,8 +17,8 @@
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
 				{% include "partials/like_btn.html.twig" with {'item': item,} %}
 				{% if app.user and app.user.email == item.itemCollection.user.email %}
-					<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-lg btn-warning">Edit</a>
-					<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-lg btn-outline-danger">Delete</a>
+					<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-lg btn-outline-warning">✏️ Edit</a>
+					<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-lg btn-outline-danger">🗑️ Delete</a>
 				{% endif %}
 			</div>
 		</div>
@@ -84,23 +84,30 @@
 					</div>
 				</div>
 			{% endfor %}
-
-			{% for text in item.textFields %}
-				<div class="col d-flex align-items-start">
-					<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-						<use xlink:href="#bootstrap"></use>
-					</svg>
-					<div>
-						<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ text.name|capitalize }}</h3>
-						<p>{{ text.value|nl2br }}</p>
-					</div>
-				</div>
-			{% endfor %}
 		</div>
+
+		{% for text in item.textFields %}
+			<div class="col d-flex align-items-start">
+				<svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
+					<use xlink:href="#bootstrap"></use>
+				</svg>
+				<div>
+					<h3 class="fw-bold mb-0 fs-4 text-body-emphasis">{{ text.name|capitalize }}</h3>
+					<p>{{ text.value|nl2br }}</p>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 
 	<p class="h3">Comments</p>
+	{% if error %}
+		<div class="alert alert-danger" role="alert">
+			{{ error }}
+		</div>
+	{% endif %}
+
 	{% include('comment/comment_form.html.twig') with {'item': item} %}
+
 	{% if item.comments %}
 		{% for comment in item.comments %}
 			{% include('comment/index.html.twig') with {'comment': comment} %}

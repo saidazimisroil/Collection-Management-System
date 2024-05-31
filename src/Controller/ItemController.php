@@ -26,12 +26,14 @@ class ItemController extends AbstractController
     ) {}
 
     #[Route('/show/{id<\d+>}', name: 'app_item_show', methods:['GET'])]
-    public function show(int $id): Response
+    public function show(int $id, Request $request): Response
     {
         $item = $this->em->getRepository(Item::class)->find($id);
+        $error = $request->query->get('error');
 
         return $this->render('item/show_item.html.twig', [
             'item' => $item,
+            'error' => $error,
             'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }

@@ -22,14 +22,22 @@ class CommentController extends AbstractController
     #[Route('/comment/{id<\d+>}', name: 'app_comment')]
     public function index(int $id, Request $request): Response
     {
+        // Trim trailing whitespace and newline characters from the content
+        $content = $request->query->get('content');
+        $trimmedContent = rtrim($content);
+        if (empty($trimmedContent)) {
+            return $this->redirectToRoute('app_item_show', [
+                'id' => $id,
+                'error' => "You can't post an empty comment!"
+            ]);
+        }
+
+
         $currentUser = $this->security->getUser();
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $currentUser->getUserIdentifier()]);
     
         $item = $this->em->getRepository(Item::class)->find($id);
     
-        // Trim trailing whitespace and newline characters from the content
-        $content = $request->query->get('content');
-        $trimmedContent = rtrim($content);
     
         $comment = new Comment();
         $comment->setContent($trimmedContent);
