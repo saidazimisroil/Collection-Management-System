@@ -21,7 +21,7 @@
 					{% endif %}
 				{% endfor %}
 			{% endif %}
-			{% if app.user and app.user.email == collection.user.email %}
+			{% if app.user and (app.user.email == collection.user.email or app.user.email in admins) %}
 				<th scope="col">Actions</th>
 			{% endif %}
 		</tr>
@@ -43,7 +43,7 @@
 					<td>{{ date.stringValue }}</td>
 				{% endfor %}
 
-				{% if app.user and app.user.email == collection.user.email %}
+				{% if app.user and (app.user.email == collection.user.email or app.user.email in admins) %}
 					<td>
 						<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-outline-warning">✏️</a>
 						<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-outline-danger">🗑️</a>
