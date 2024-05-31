@@ -17,7 +17,7 @@
 			<p class="lead mb-1">Category:
 				{{ collection.category }}</p>
 
-			{% if app.user and app.user.email == collection.user.email %}
+			{% if app.user and (app.user.email == collection.user.email or app.user.email in admins) %}
 				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 					<a href={{ path('app_item_new', {id:collection.id} ) }} type="button" class="btn btn-success btn-lg px-4 gap-3">+ Add New Item</a>
 					<a href={{ path('app_collection_update_form', {id:collection.id} ) }} type="button" class="btn btn-warning btn-lg px-4 gap-3">Edit Collection Details</a>

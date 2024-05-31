@@ -16,7 +16,7 @@
 				{{ item.likes ? item.likes.users|length : 0 }}</p>
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
 				{% include "partials/like_btn.html.twig" with {'item': item,} %}
-				{% if app.user and app.user.email == item.itemCollection.user.email %}
+				{% if app.user and (app.user.email == item.itemCollection.user.email or app.user.email in admins) %}
 					<a href="{{ path('app_item_edit', {id: item.id}) }}" class="btn btn-lg btn-outline-warning">✏️ Edit</a>
 					<a href="{{ path('app_item_delete', {id: item.id}) }}" class="btn btn-lg btn-outline-danger">🗑️ Delete</a>
 				{% endif %}

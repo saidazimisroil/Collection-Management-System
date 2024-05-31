@@ -10,6 +10,7 @@ use App\Entity\ItemCollection;
 use App\Entity\StringField;
 use App\Entity\Tag;
 use App\Entity\TextField;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -31,9 +32,19 @@ class ItemController extends AbstractController
         $item = $this->em->getRepository(Item::class)->find($id);
         $error = $request->query->get('error');
 
+        $users = $this->em->getRepository(User::class)->findAll();
+
+        $admins = [];
+        foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN',$user->getRoles())) {
+                $admins[] = $user->getEmail();
+            }
+        }
+
         return $this->render('item/show_item.html.twig', [
             'item' => $item,
             'error' => $error,
+            'admins' => $admins,
             'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
@@ -204,10 +215,6 @@ class ItemController extends AbstractController
         $item = $this->em->getRepository(Item::class)->find($id);
 
         $collection = $item->getItemCollection();
-        $currentUser = $this->security->getUser();
-        if($currentUser !== $collection->getUser()){
-            return $this->redirectToRoute('app_collections_my');
-        }
         
         return $this->render('item/update_item.html.twig', [
             'item' => $item,
@@ -227,11 +234,7 @@ class ItemController extends AbstractController
         }
     
         $collection = $item->getItemCollection();
-        $currentUser = $this->security->getUser();
-        if($currentUser !== $collection->getUser()){
-            return $this->redirectToRoute('app_collections_my');
-        }
-    
+
         $itemName = $request->request->get('name');
         if(!$this->isItemNameUnique($itemName, $collection, $item->getId())){
             return $this->render('item/update_item.html.twig', [
@@ -355,10 +358,6 @@ class ItemController extends AbstractController
         $item = $this->em->getRepository(Item::class)->find($id);
 
         $collection = $item->getItemCollection();
-        $currentUser = $this->security->getUser();
-        if($currentUser !== $collection->getUser()){
-            return $this->redirectToRoute('app_collections_my');
-        }
 
         $this->em->remove($item);
         $this->em->flush();

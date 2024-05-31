@@ -145,9 +145,17 @@ class CollectionsController extends AbstractController
     {
         // chosen collection
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
+        $users = $this->em->getRepository(User::class)->findAll();
 
+        $admins = [];
+        foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN',$user->getRoles())) {
+                $admins[] = $user->getEmail();
+            }
+        }
         return $this->render('collections/collection.html.twig', [
             'collection' => $collection,
+            'admins' => $admins,
             'tags' => $this->em->getRepository(Tag::class)->getExistingTagNames()
         ]);
     }
@@ -158,11 +166,6 @@ class CollectionsController extends AbstractController
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
         if (!$collection) {
             throw $this->createNotFoundException('The collection does not exist');
-        }
-
-        $currentUser = $this->security->getUser();
-        if($currentUser !== $collection->getUser()){
-            return $this->redirectToRoute('app_collections_my');
         }
         
         $currentCategory = $collection->getCategory(); // Assuming getCategory() method returns a CategoriesEnum object
@@ -233,11 +236,6 @@ class CollectionsController extends AbstractController
     public function deleteCollection(int $id): Response
     {
         $collection = $this->em->getRepository(ItemCollection::class)->find($id);
-
-        $currentUser = $this->security->getUser();
-        if($currentUser !== $collection->getUser()){
-            return $this->redirectToRoute('app_collections_my');
-        }
 
         $this->em->remove($collection);
         $this->em->flush();
