@@ -71,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->registrationTime = new \DateTimeImmutable();
         $this->status = UserStatusEnum::ACTIVE->value;
         // Initialize with default admin role
-        $this->roles = ['ROLE_ADMIN'];
+        $this->roles = ['ROLE_USER'];
         $this->itemCollectionId = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -285,5 +285,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getDateOfBirth() {
+        return $this->birthday->format('Y.m.d');
     }
 }

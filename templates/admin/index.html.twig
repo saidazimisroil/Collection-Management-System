@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin
+{% endblock %}
+
+{% block body %}
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Birth date</th>
+				<th scope="col">Email</th>
+				<th scope="col">Status</th>
+				<th scope="col">Roles</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+				<tr>
+					<th scope="row">{{ loop.index }}</th>
+					<td>{{ user.name }}</td>
+					<td>{{ user.dateOfBirth }}</td>
+					<td>{{ user.email }}</td>
+					<td>{{ user.status }}</td>
+					<td>
+						{{ user.roles|join(', ') }}
+					</td>
+					<td>
+						{% if user.status == 'active' %}
+							<a href="/users/block/{{ user.id }}" class="btn btn-outline-warning">Block</a>
+						{% else %}
+							<a href="/users/unblock/{{ user.id }}" class="btn btn-success">Unblock</a>
+						{% endif %}
+
+						{% if 'ROLE_ADMIN' in user.roles %}
+							<a href={{ path('app_admin_remove', {id: user.id} ) }} class="btn btn-outline-danger">Remove Admin</a>
+						{% else %}
+							<a href={{ path('app_admin_add', {id: user.id} ) }} class="btn btn-outline-success">Add Admin</a>
+						{% endif %}
+
+						<a href="/users/delete/{{ user.id }}" class="btn btn-danger">Delete</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
