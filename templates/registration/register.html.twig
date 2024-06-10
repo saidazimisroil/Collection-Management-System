@@ -6,8 +6,8 @@
 {% block register %}
 	<p class="h1 mx-auto">Register</p>
 {% endblock %}
-{% block body %}
 
+{% block body %}
 	{{ form_errors(registrationForm) }}
 
 	{{ form_start(registrationForm) }}
@@ -17,6 +17,7 @@
 	{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
+	{{ form_row(registrationForm.agreeTerms) }}
 
 	<button type="submit" class="btn btn-success">Register</button>
 	{{ form_end(registrationForm) }}
