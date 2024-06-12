@@ -23,5 +23,11 @@ services:
   App\Form\Type\HtmlType:
     tags: ["form.type"]
 
+  App\Service\JiraService:
+    arguments:
+      $apiUrl: "%jira.api_url%"
+      $email: "%jira.email%"
+      $apiToken: "%jira.api_token%"
+
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

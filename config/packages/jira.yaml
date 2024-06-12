@@ -1,0 +1,4 @@
+parameters:
+  jira.api_url: "%env(JIRA_API_URL)%"
+  jira.email: "%env(JIRA_EMAIL)%"
+  jira.api_token: "%env(JIRA_API_TOKEN)%"

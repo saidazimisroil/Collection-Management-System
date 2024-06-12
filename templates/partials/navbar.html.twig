@@ -22,6 +22,7 @@
 
 		<div class="col-md-3 text-end">
 			{% if app.user %}
+				<a href="{{ path('app_ticket_create') }}" id="create-ticket-button" type="button" class="btn btn-outline-warning me-2 shadow-lg">🎫 Create ticket</a>
 				<a href={{ logout_path() }} type="button" class="btn btn-outline-danger me-2 shadow-lg">Logout</a>
 			{% else %}
 				<a href={{ url("app_login") }} type="button" class="btn btn-outline-primary me-2 shadow-lg">Login</a>
@@ -30,3 +31,12 @@
 		</div>
 	</header>
 </div>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+var button = document.getElementById('create-ticket-button');
+var help = document.getElementById('create-ticket-help');
+var currentUrl = window.location.href;
+button.href = button.href + '?link=' + encodeURIComponent(currentUrl);
+help.href = help.href + '?link=' + encodeURIComponent(currentUrl);
+});
+</script>

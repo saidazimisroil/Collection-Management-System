@@ -44,6 +44,7 @@ security:
     - { path: ^/item/delete, roles: [ROLE_USER, ROLE_ADMIN] }
     - { path: ^/like, roles: [ROLE_USER, ROLE_ADMIN] }
     - { path: ^/comment, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/create-ticket, roles: [ROLE_USER, ROLE_ADMIN] }
 
 when@test:
   security:
